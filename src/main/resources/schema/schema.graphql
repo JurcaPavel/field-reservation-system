@@ -3,7 +3,6 @@ schema {
   mutation: Mutation
 }
 
-
 type Query {
   sportsField(id: ID!): SportsField!
   sportsFields(filters: SportsFieldFiltersInput, pagination: PaginationInput!, sortBy: [SportsFieldSortByInput!]): SportsFieldsWrapper!
