@@ -1,0 +1,3 @@
+package cz.jurca.fieldreservationsystem.configuration
+
+interface ConfigurationProvider

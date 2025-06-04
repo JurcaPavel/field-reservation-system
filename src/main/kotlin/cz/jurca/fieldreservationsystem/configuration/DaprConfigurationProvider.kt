@@ -1,9 +1,8 @@
-package cz.jurca.field_reservation_system.configuration
+package cz.jurca.fieldreservationsystem.configuration
 
 import org.springframework.context.annotation.Profile
 import org.springframework.stereotype.Component
 
 @Component
 @Profile("!test & !local")
-class DaprConfigurationProvider : ConfigurationProvider {
-}
+class DaprConfigurationProvider : ConfigurationProvider

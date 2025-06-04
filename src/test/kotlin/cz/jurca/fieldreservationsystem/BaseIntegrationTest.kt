@@ -1,6 +1,6 @@
-package cz.jurca.field_reservation_system
+package cz.jurca.fieldreservationsystem
 
-import cz.jurca.field_reservation_system.repository.SportsFieldRepository
+import cz.jurca.fieldreservationsystem.repository.SportsFieldRepository
 import io.kotest.extensions.spring.SpringExtension
 import kotlinx.coroutines.runBlocking
 import org.springframework.beans.factory.annotation.Autowired
@@ -14,18 +14,18 @@ import org.testcontainers.utility.DockerImageName
 @ActiveProfiles("test")
 @SpringBootTest(classes = [FieldReservationSystemApplication::class])
 abstract class BaseIntegrationTest : BaseTest() {
-
     // reuse the PostgreSQL container across tests to speed up the test execution
     companion object {
         @JvmStatic
-        val postgresContainer: PostgreSQLContainer<*> = PostgreSQLContainer(DockerImageName.parse("postgres:16.2"))
-            .withDatabaseName("field_reservation")
-            .withUsername("field_reservation_db_user")
-            .withPassword("field_reservation_password@666")
-            .withEnv("POSTGRES_HOST_AUTH_METHOD", "trust")
-            .withCreateContainerCmdModifier { cmd -> cmd.withName("field_reservation_db_test") }
-            .withReuse(true)
-            .apply { start() }
+        val postgresContainer: PostgreSQLContainer<*> =
+            PostgreSQLContainer(DockerImageName.parse("postgres:16.2"))
+                .withDatabaseName("field_reservation")
+                .withUsername("field_reservation_db_user")
+                .withPassword("field_reservation_password@666")
+                .withEnv("POSTGRES_HOST_AUTH_METHOD", "trust")
+                .withCreateContainerCmdModifier { cmd -> cmd.withName("field_reservation_db_test") }
+                .withReuse(true)
+                .apply { start() }
 
         @DynamicPropertySource
         @JvmStatic

@@ -1,4 +1,4 @@
-CREATE TABLE sports_field
+CREATE TABLE IF NOT EXISTS sports_field
 (
     id   SERIAL PRIMARY KEY NOT NULL,
     name VARCHAR(255)       NOT NULL

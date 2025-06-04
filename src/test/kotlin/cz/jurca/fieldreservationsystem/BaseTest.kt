@@ -1,4 +1,4 @@
-package cz.jurca.field_reservation_system
+package cz.jurca.fieldreservationsystem
 
 import io.kotest.core.spec.style.AnnotationSpec
 

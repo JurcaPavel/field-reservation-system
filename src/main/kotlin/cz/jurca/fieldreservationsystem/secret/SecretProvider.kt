@@ -1,4 +1,4 @@
-package cz.jurca.field_reservation_system.secret
+package cz.jurca.fieldreservationsystem.secret
 
 interface SecretProvider {
     fun getDatabaseCredentials(): DatabaseCredentials

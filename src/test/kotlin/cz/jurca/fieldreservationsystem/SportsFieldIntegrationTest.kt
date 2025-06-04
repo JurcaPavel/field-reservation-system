@@ -1,6 +1,6 @@
-package cz.jurca.field_reservation_system
+package cz.jurca.fieldreservationsystem
 
-import cz.jurca.field_reservation_system.repository.SportsFieldDao
+import cz.jurca.fieldreservationsystem.repository.SportsFieldDao
 import io.kotest.matchers.shouldBe
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking

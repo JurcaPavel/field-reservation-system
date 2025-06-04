@@ -1,4 +1,4 @@
-package cz.jurca.field_reservation_system
+package cz.jurca.fieldreservationsystem
 
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication
@@ -7,5 +7,5 @@ import org.springframework.boot.runApplication
 class FieldReservationSystemApplication
 
 fun main(args: Array<String>) {
-	runApplication<FieldReservationSystemApplication>(*args)
+    runApplication<FieldReservationSystemApplication>(*args)
 }

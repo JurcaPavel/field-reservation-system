@@ -1,4 +1,4 @@
-package cz.jurca.field_reservation_system.configuration
+package cz.jurca.fieldreservationsystem.configuration
 
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.context.annotation.Bean
