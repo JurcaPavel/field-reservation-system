@@ -1,0 +1,37 @@
+spring:
+  application:
+    name:
+      field-reservation-system
+  r2dbc.pool:
+    enabled: true
+    initial-size: 10
+    max-size: 50
+
+dgs:
+  graphql:
+    path: "/public/graphql"
+    graphiql:
+      enabled: true
+      path: "/graphiql"
+
+server:
+  port: 8081
+
+
+management:
+  endpoint:
+    info:
+      access: read_only
+    health:
+      probes.enabled: true
+      show-details: always
+  endpoints:
+    web:
+      base-path: "/management/"
+      exposure:
+        include: "*"
+    access:
+      default: read_only
+
+frontend:
+  domain: "http://localhost:4200,https://theoretic.stage.jurca.cz,https://theoretic.jurca.cz"
