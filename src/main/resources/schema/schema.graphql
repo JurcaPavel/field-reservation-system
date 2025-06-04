@@ -1,0 +1,97 @@
+schema {
+  query: Query
+  mutation: Mutation
+}
+
+
+type Query {
+  sportsField(id: ID!): SportsField!
+  sportsFields(filters: SportsFieldFiltersInput, pagination: PaginationInput!, sortBy: [SportsFieldSortByInput!]): SportsFieldsWrapper!
+}
+
+type SportsField {
+  city: String!
+  coordinates: Coordinates!
+  countryCode: String!
+  id: ID!
+  name: String!
+  sportTypes: [SportType!]!
+  street: String!
+  zipCode: String!
+}
+
+enum SportType {
+  BASKETBALL
+  BEACH_VOLLEYBALL
+  SOCCER
+  TENNIS
+}
+
+type Coordinates {
+  latitude: Float!
+  longitude: Float!
+}
+
+type Mutation {
+  createSportsField(input: CreateSportsFieldInput!): SportsField!
+  editSportsField(id: ID!, input: EditSportsFieldInput!): SportsField!
+}
+
+# TODO later infer the city country code street zipcode from coordinates (maybe using ai)
+input CreateSportsFieldInput {
+  city: String!
+  coordinates: CoordinatesInput!
+  countryCode: String!
+  name: String!
+  street: String!
+  zipCode: String!
+}
+
+input EditSportsFieldInput {
+  city: String!
+  coordinates: CoordinatesInput!
+  countryCode: String!
+  name: String!
+  street: String!
+  zipCode: String!
+}
+
+input CoordinatesInput {
+  latitude: Float!
+  longitude: Float!
+}
+
+input SportsFieldFiltersInput {
+  city: String
+  countryCode: String
+  sportTypes: [SportType!]
+}
+
+input PaginationInput {
+  pageNumber: Int!
+  pageSize: Int!
+}
+
+input SportsFieldSortByInput {
+  field: SportsFieldSortByField!
+  direction: SortByDirection!
+}
+
+enum SportsFieldSortByField {
+  NAME
+  SPORT_TYPE
+}
+
+enum SortByDirection {
+  ASC
+  DESC
+}
+
+type SportsFieldsWrapper {
+  paginationInfo: PaginationInfo!
+  sportsFields: [SportsField!]!
+}
+
+type PaginationInfo {
+  itemsTotalCount: Int!
+}
