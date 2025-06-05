@@ -1,5 +1,7 @@
 package cz.jurca.fieldreservationsystem
 
+import com.netflix.graphql.dgs.DgsQueryExecutor
+import com.netflix.graphql.dgs.test.EnableDgsTest
 import cz.jurca.fieldreservationsystem.repository.SportsFieldRepository
 import io.kotest.extensions.spring.SpringExtension
 import kotlinx.coroutines.runBlocking
@@ -13,6 +15,7 @@ import org.testcontainers.utility.DockerImageName
 
 @ActiveProfiles("test")
 @SpringBootTest(classes = [FieldReservationSystemApplication::class])
+@EnableDgsTest
 abstract class BaseIntegrationTest : BaseTest() {
     // reuse the PostgreSQL container across tests to speed up the test execution
     companion object {
@@ -40,6 +43,9 @@ abstract class BaseIntegrationTest : BaseTest() {
     }
 
     override fun extensions() = listOf(SpringExtension)
+
+    @Autowired
+    protected lateinit var dgsQueryExecutor: DgsQueryExecutor
 
     @Autowired
     protected lateinit var sportsFieldRepository: SportsFieldRepository

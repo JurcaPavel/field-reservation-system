@@ -69,7 +69,6 @@ kotlin {
 }
 
 tasks.generateJava {
-    schemaPaths.add("$projectDir/src/main/resources/graphql-client")
     packageName = "cz.jurca.fieldreservationsystem.codegen"
     generateClient = true
 }
@@ -79,7 +78,6 @@ tasks.withType<Test> {
 }
 
 ktlint {
-    enableExperimentalRules.set(true)
     filter {
         // exclude("**/generated/**")
         exclude { projectDir.toURI().relativize(it.file.toURI()).path.contains("/generated/") }
