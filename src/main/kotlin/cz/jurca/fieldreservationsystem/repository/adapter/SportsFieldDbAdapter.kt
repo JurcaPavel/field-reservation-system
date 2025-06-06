@@ -44,6 +44,13 @@ class SportsFieldDbAdapter(
         }
 
     suspend fun filterSportsFields(page: UnloadedFilteredPage<SportsFieldId, SportsFieldFilter, UnloadedFilteredPage.SportsFieldSortBy>): Page<SportsFieldId> {
-        return TODO("IMPLEMENT ME")
+        // TODO filtering and sorting
+        val pagedSportsFieldDaos = sportsFieldRepository.findAllPaged(page.pageSize, page.getOffset())
+        // TODO Later customize the count query based on filters
+        val sportsFieldsCount = sportsFieldRepository.count()
+        return Page(
+            items = pagedSportsFieldDaos.map { SportsFieldId(it.getDaoId(), this::getDetail) },
+            totalItems = sportsFieldsCount.toInt(),
+        )
     }
 }

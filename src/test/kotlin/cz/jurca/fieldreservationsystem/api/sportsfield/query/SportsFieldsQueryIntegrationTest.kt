@@ -55,8 +55,8 @@ class SportsFieldsQueryIntegrationTest : BaseIntegrationTest() {
             When()
             val response =
                 dgsQueryExecutor.executeAndExtractJsonPathAsObject(
-                    sportsFieldsQuery(paginationInput),
-                    "data.sportsField",
+                    sportsFieldsQueryPaged(paginationInput),
+                    "data.sportsFields",
                     SportsFieldsWrapper::class.java,
                 )
 
@@ -70,7 +70,7 @@ class SportsFieldsQueryIntegrationTest : BaseIntegrationTest() {
     // TODO big page size and just one field in db should return just that one field
     // TODO filtering by country/city/sporttypes
 
-    private fun sportsFieldsQuery(paginationInput: PaginationInput): String =
+    private fun sportsFieldsQueryPaged(paginationInput: PaginationInput): String =
         """
         query MyQuery {
           sportsFields(pagination: {pageNumber: ${paginationInput.pageNumber}, pageSize: ${paginationInput.pageSize}}) {
@@ -79,20 +79,20 @@ class SportsFieldsQueryIntegrationTest : BaseIntegrationTest() {
             }
             sportsFields {
               city
-              coordinates {
-                latitude
-                longitude
-              }
-              country {
-                code
-                name
-              }
               description
               id
               name
               sportTypes
               street
               zipCode
+              country {
+                code
+                name
+              }
+              coordinates {
+                latitude
+                longitude
+              }
             }
           }
         }
