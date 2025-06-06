@@ -46,27 +46,17 @@ class SportsFieldsQuery(private val sportsFieldDbAdapter: SportsFieldDbAdapter) 
                 .withPaginationInfo(PaginationInfo.Builder().withItemsTotalCount(page.totalItems).build())
                 .withSportsFields(
                     page.items.map { sportsField ->
-                        SportsField.Builder()
-                            .withId(sportsField.id.value.toString())
-                            .withName(sportsField.name.value)
-                            .withSportTypes(sportsField.sportTypes.map { it.toApi() })
-                            .withCoordinates(
-                                Coordinates.Builder()
-                                    .withLatitude(sportsField.latitude)
-                                    .withLongitude(sportsField.longitude)
-                                    .build(),
-                            )
-                            .withCity(sportsField.address.city.value)
-                            .withStreet(sportsField.address.street?.value)
-                            .withZipCode(sportsField.address.zipCode.value)
-                            .withCountry(
-                                Country.Builder()
-                                    .withCode(sportsField.address.country.alphaCode3.value)
-                                    .withName(sportsField.address.country.countryName.value)
-                                    .build(),
-                            )
-                            .withDescription(sportsField.description?.value)
-                            .build()
+                        SportsField(
+                            id = { sportsField.id.value.toString() },
+                            name = { sportsField.name.value },
+                            sportTypes = { sportsField.sportTypes.map { it.toApi() }},
+                            coordinates = { Coordinates({sportsField.latitude}, {sportsField.longitude}) },
+                            city = { sportsField.address.city.value },
+                            street = { sportsField.address.street?.value },
+                            zipCode = { sportsField.address.zipCode.value },
+                            country = { Country({sportsField.address.country.alphaCode3.value}, {sportsField.address.country.countryName.value}) },
+                            description = { sportsField.description?.value },
+                        )
                     },
                 )
                 .build()
