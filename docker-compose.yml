@@ -1,0 +1,39 @@
+version: '3.8'
+
+services:
+  app:
+    build: .
+    ports:
+      - "8081:80"
+    depends_on:
+      - db
+    environment:
+      - SPRING_PROFILES_ACTIVE=local
+      - DB_HOST=db
+      - DB_PORT=5432
+      - DB_NAME=field_reservation
+      - DB_USER=field_reservation_db_user
+      - DB_PASSWORD=field_reservation_db_password
+    networks:
+      - field-reservation-network
+
+  db:
+    image: postgres:16.2
+    container_name: field_reservation_db
+    ports:
+      - "54328:5432"
+    environment:
+      - POSTGRES_DB=field_reservation
+      - POSTGRES_USER=field_reservation_db_user
+      - POSTGRES_PASSWORD=field_reservation_db_password
+    volumes:
+      - field_reservation_postgres_data:/var/lib/postgresql/data
+    networks:
+      - field-reservation-network
+
+networks:
+  field-reservation-network:
+    driver: bridge
+
+volumes:
+  field_reservation_postgres_data:

@@ -12,10 +12,10 @@ import org.springframework.stereotype.Component
 class LocalSecretProvider : SecretProvider {
     override fun getDatabaseCredentials(): DatabaseCredentials =
         DatabaseCredentials(
-            host = Secret("localhost"),
-            port = Secret("54328"),
-            database = Secret("field_reservation"),
-            username = Secret("field_reservation_db_user"),
-            password = Secret("field_reservation_db_password"),
+            host = Secret(System.getenv("DB_HOST") ?: "localhost"),
+            port = Secret(System.getenv("DB_PORT") ?: "54328"),
+            database = Secret(System.getenv("DB_NAME") ?: "field_reservation"),
+            username = Secret(System.getenv("DB_USER") ?: "field_reservation_db_user"),
+            password = Secret(System.getenv("DB_PASSWORD") ?: "field_reservation_db_password"),
         )
 }

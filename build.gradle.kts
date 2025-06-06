@@ -8,7 +8,8 @@ plugins {
 }
 
 group = "cz.jurca"
-version = "0.0.1-SNAPSHOT"
+// todo actual version should be provided externally during ci/cd (github actions)
+version = "@@VERSION@@"
 
 java {
     toolchain {
@@ -71,6 +72,10 @@ kotlin {
 tasks.generateJava {
     packageName = "cz.jurca.fieldreservationsystem.codegen"
     generateClient = true
+}
+
+tasks.bootJar {
+    archiveFileName.set("field-reservation-system.jar")
 }
 
 tasks.withType<Test> {

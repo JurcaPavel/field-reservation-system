@@ -8,7 +8,7 @@ type Query {
   sportsFields(
     filters: SportsFieldFiltersInput,
     pagination: PaginationInput!,
-    sortBy: SportsFieldSortByInput!
+    sortBy: SportsFieldSortByInput
   ): SportsFieldsWrapper!
 }
 
