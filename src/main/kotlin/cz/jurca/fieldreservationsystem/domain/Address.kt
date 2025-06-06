@@ -275,8 +275,8 @@ enum class Country(val countryName: Name, val alphaCode3: AlphaCode3) {
     ;
 
     companion object {
-        fun findByCode(code: String): Country? {
-            return entries.find { it.alphaCode3.value == code }
+        fun findByCode(code: AlphaCode3): Country? {
+            return entries.find { it.alphaCode3.value == code.value }
         }
     }
 

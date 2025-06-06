@@ -30,7 +30,7 @@ class SportsFieldsQuery(private val sportsFieldDbAdapter: SportsFieldDbAdapter) 
                 SportsFieldFilter(
                     city = filters?.city?.let { City(it) },
                     countryCode = filters?.countryCode?.let { cz.jurca.fieldreservationsystem.domain.Country.AlphaCode3(it) },
-                    sportTypes = filters?.sportTypes?.map { cz.jurca.fieldreservationsystem.domain.SportType.fromApi(it) } ?: emptyList(),
+                    sportTypes = filters?.sportTypes?.map { cz.jurca.fieldreservationsystem.domain.SportType.fromApi(it) },
                 ),
             dataLoader = sportsFieldDbAdapter::filterSportsFields,
             // loginUser = userProvider.getLoginUser().getOrThrow(),
@@ -42,23 +42,33 @@ class SportsFieldsQuery(private val sportsFieldDbAdapter: SportsFieldDbAdapter) 
                     )
                 },
         ).getData().let { page ->
-            SportsFieldsWrapper(
-                paginationInfo = PaginationInfo(page.totalItems),
-                sportsFields =
-                    page.items.map { sportsFieldId ->
-                        val sportsField = sportsFieldId.getDetail()
-                        SportsField(
-                            id = sportsFieldId.value.toString(),
-                            name = sportsField.name.value,
-                            sportTypes = sportsField.sportTypes.map { it.toApi() },
-                            coordinates = Coordinates(sportsField.latitude, sportsField.longitude),
-                            city = sportsField.address.city.value,
-                            street = sportsField.address.street?.value,
-                            zipCode = sportsField.address.zipCode.value,
-                            country = Country(sportsField.address.country.alphaCode3.value, sportsField.address.country.countryName.value),
-                            description = sportsField.description?.value,
-                        )
+            SportsFieldsWrapper.Builder()
+                .withPaginationInfo(PaginationInfo.Builder().withItemsTotalCount(page.totalItems).build())
+                .withSportsFields(
+                    page.items.map { sportsField ->
+                        SportsField.Builder()
+                            .withId(sportsField.id.value.toString())
+                            .withName(sportsField.name.value)
+                            .withSportTypes(sportsField.sportTypes.map { it.toApi() })
+                            .withCoordinates(
+                                Coordinates.Builder()
+                                    .withLatitude(sportsField.latitude)
+                                    .withLongitude(sportsField.longitude)
+                                    .build(),
+                            )
+                            .withCity(sportsField.address.city.value)
+                            .withStreet(sportsField.address.street?.value)
+                            .withZipCode(sportsField.address.zipCode.value)
+                            .withCountry(
+                                Country.Builder()
+                                    .withCode(sportsField.address.country.alphaCode3.value)
+                                    .withName(sportsField.address.country.countryName.value)
+                                    .build(),
+                            )
+                            .withDescription(sportsField.description?.value)
+                            .build()
                     },
-            )
+                )
+                .build()
         }
 }

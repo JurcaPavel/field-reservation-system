@@ -1,3 +1,5 @@
+import com.netflix.graphql.dgs.codegen.gradle.GenerateJavaTask
+
 plugins {
     kotlin("jvm") version "2.0.21"
     kotlin("plugin.spring") version "1.9.25"
@@ -35,6 +37,7 @@ dependencies {
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
     implementation("io.github.oshai:kotlin-logging-jvm:$oshaiKotlinLogging")
     implementation("com.netflix.graphql.dgs:graphql-dgs-spring-graphql-starter")
+    implementation("com.netflix.graphql.dgs:graphql-dgs-client")
     implementation("io.projectreactor.kotlin:reactor-kotlin-extensions")
     implementation("org.flywaydb:flyway-core")
     implementation("org.flywaydb:flyway-database-postgresql")
@@ -80,6 +83,13 @@ tasks.bootJar {
 
 tasks.withType<Test> {
     useJUnitPlatform()
+}
+
+tasks.withType<GenerateJavaTask> {
+    language = "kotlin"
+    generateClient = true
+    generateKotlinNullableClasses = true
+    generateKotlinClosureProjections = true
 }
 
 ktlint {
