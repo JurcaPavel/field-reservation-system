@@ -9,15 +9,11 @@ import cz.jurca.fieldreservationsystem.codegen.types.SportsFieldFiltersInput
 import cz.jurca.fieldreservationsystem.codegen.types.SportsFieldSortByField
 import cz.jurca.fieldreservationsystem.codegen.types.SportsFieldSortByInput
 import cz.jurca.fieldreservationsystem.codegen.types.SportsFieldsWrapper
-import cz.jurca.fieldreservationsystem.repository.SportTypeDao
-import cz.jurca.fieldreservationsystem.repository.SportsFieldDao
-import cz.jurca.fieldreservationsystem.repository.SportsFieldSportTypeDao
 import io.kotest.matchers.collections.shouldBeEmpty
 import io.kotest.matchers.collections.shouldHaveSize
 import io.kotest.matchers.shouldBe
 import kotlinx.coroutines.runBlocking
 
-// TODO add test data builder
 class SportsFieldsQueryIntegrationTest : BaseIntegrationTest() {
     @Test
     fun `given no sports fields in db when get then return empty response`() {
@@ -43,30 +39,8 @@ class SportsFieldsQueryIntegrationTest : BaseIntegrationTest() {
     fun `given some sports fields in db when page number is too high then return empty response`() {
         runBlocking {
             Given()
-            sportsFieldRepository.save(
-                SportsFieldDao(
-                    name = "Field 1",
-                    latitude = 48.1486,
-                    longitude = 17.1077,
-                    city = "Bratislava",
-                    street = "Hlavná 1",
-                    zipCode = "81101",
-                    countryCode = "SVK",
-                    description = "Test field 1",
-                ),
-            )
-            sportsFieldRepository.save(
-                SportsFieldDao(
-                    name = "Field 2",
-                    latitude = 48.2089,
-                    longitude = 16.3726,
-                    city = "Vienna",
-                    street = "Hauptstrasse 2",
-                    zipCode = "1010",
-                    countryCode = "AUT",
-                    description = "Test field 2",
-                ),
-            )
+            testDataBuilder.buildSportsField(name = "Field 1")
+            testDataBuilder.buildSportsField(name = "Field 2")
             val paginationInput = PaginationInput(10, 10)
 
             When()
@@ -87,41 +61,35 @@ class SportsFieldsQueryIntegrationTest : BaseIntegrationTest() {
     fun `given sports fields in db when filter by country then return only matching fields`() {
         runBlocking {
             Given()
-            sportsFieldRepository.save(
-                SportsFieldDao(
-                    name = "Field 1",
-                    latitude = 48.1486,
-                    longitude = 17.1077,
-                    city = "Bratislava",
-                    street = "Hlavná 1",
-                    zipCode = "81101",
-                    countryCode = "SVK",
-                    description = "Test field 1",
-                ),
+            testDataBuilder.buildSportsField(
+                name = "Field 1",
+                latitude = 48.1486,
+                longitude = 17.1077,
+                city = "Bratislava",
+                street = "Hlavná 1",
+                zipCode = "81101",
+                countryCode = "SVK",
+                description = "Test field 1",
             )
-            sportsFieldRepository.save(
-                SportsFieldDao(
-                    name = "Field 2",
-                    latitude = 48.2089,
-                    longitude = 16.3726,
-                    city = "Vienna",
-                    street = "Hauptstrasse 2",
-                    zipCode = "1010",
-                    countryCode = "AUT",
-                    description = "Test field 2",
-                ),
+            testDataBuilder.buildSportsField(
+                name = "Field 2",
+                latitude = 48.2089,
+                longitude = 16.3726,
+                city = "Vienna",
+                street = "Hauptstrasse 2",
+                zipCode = "1010",
+                countryCode = "AUT",
+                description = "Test field 2",
             )
-            sportsFieldRepository.save(
-                SportsFieldDao(
-                    name = "Field 3",
-                    latitude = 50.0755,
-                    longitude = 14.4378,
-                    city = "Prague",
-                    street = "Hlavní 3",
-                    zipCode = "11000",
-                    countryCode = "CZE",
-                    description = "Test field 3",
-                ),
+            testDataBuilder.buildSportsField(
+                name = "Field 3",
+                latitude = 50.0755,
+                longitude = 14.4378,
+                city = "Prague",
+                street = "Hlavní 3",
+                zipCode = "11000",
+                countryCode = "CZE",
+                description = "Test field 3",
             )
             val paginationInput = PaginationInput(1, 10)
             val filtersInput = SportsFieldFiltersInput(countryCode = "SVK")
@@ -145,29 +113,25 @@ class SportsFieldsQueryIntegrationTest : BaseIntegrationTest() {
     fun `given sports fields in db when filter by city then return only matching fields`() {
         runBlocking {
             Given()
-            sportsFieldRepository.save(
-                SportsFieldDao(
-                    name = "Field 1",
-                    latitude = 48.1486,
-                    longitude = 17.1077,
-                    city = "Bratislava",
-                    street = "Hlavná 1",
-                    zipCode = "81101",
-                    countryCode = "SVK",
-                    description = "Test field 1",
-                ),
+            testDataBuilder.buildSportsField(
+                name = "Field 1",
+                latitude = 48.1486,
+                longitude = 17.1077,
+                city = "Bratislava",
+                street = "Hlavná 1",
+                zipCode = "81101",
+                countryCode = "SVK",
+                description = "Test field 1",
             )
-            sportsFieldRepository.save(
-                SportsFieldDao(
-                    name = "Field 2",
-                    latitude = 48.2089,
-                    longitude = 16.3726,
-                    city = "Vienna",
-                    street = "Hauptstrasse 2",
-                    zipCode = "1010",
-                    countryCode = "AUT",
-                    description = "Test field 2",
-                ),
+            testDataBuilder.buildSportsField(
+                name = "Field 2",
+                latitude = 48.2089,
+                longitude = 16.3726,
+                city = "Vienna",
+                street = "Hauptstrasse 2",
+                zipCode = "1010",
+                countryCode = "AUT",
+                description = "Test field 2",
             )
             val paginationInput = PaginationInput(1, 10)
             val filtersInput = SportsFieldFiltersInput(city = "Bratislava")
@@ -194,44 +158,36 @@ class SportsFieldsQueryIntegrationTest : BaseIntegrationTest() {
         runBlocking {
             Given()
             val bratislavaSportsFieldDao =
-                sportsFieldRepository.save(
-                    SportsFieldDao(
-                        name = "Field 1",
-                        latitude = 48.1486,
-                        longitude = 17.1077,
-                        city = "Bratislava",
-                        street = "Hlavná 1",
-                        zipCode = "81101",
-                        countryCode = "SVK",
-                        description = "Test field 1",
-                    ),
+                testDataBuilder.buildSportsField(
+                    name = "Field 1",
+                    latitude = 48.1486,
+                    longitude = 17.1077,
+                    city = "Bratislava",
+                    street = "Hlavná 1",
+                    zipCode = "81101",
+                    countryCode = "SVK",
+                    description = "Test field 1",
                 )
             val viennaSportsFieldDao =
-                sportsFieldRepository.save(
-                    SportsFieldDao(
-                        name = "Field 2",
-                        latitude = 48.2089,
-                        longitude = 16.3726,
-                        city = "Vienna",
-                        street = "Hauptstrasse 2",
-                        zipCode = "1010",
-                        countryCode = "AUT",
-                        description = "Test field 2",
-                    ),
+                testDataBuilder.buildSportsField(
+                    name = "Field 2",
+                    latitude = 48.2089,
+                    longitude = 16.3726,
+                    city = "Vienna",
+                    street = "Hauptstrasse 2",
+                    zipCode = "1010",
+                    countryCode = "AUT",
+                    description = "Test field 2",
                 )
-            val soccerDao = sportTypeRepository.save(SportTypeDao(SportType.SOCCER.name))
-            val basketballDao = sportTypeRepository.save(SportTypeDao(SportType.BASKETBALL.name))
-            sportsFieldSportTypeRepository.save(
-                SportsFieldSportTypeDao(
-                    sportsFieldId = bratislavaSportsFieldDao.getDaoId(),
-                    sportTypeId = soccerDao.getDaoId(),
-                ),
+            val soccerDao = repository.findSportTypeByName(SportType.SOCCER.name)
+            val basketballDao = repository.findSportTypeByName(SportType.BASKETBALL.name)
+            testDataBuilder.buildSportsFieldSportsType(
+                sportsFieldId = bratislavaSportsFieldDao.getDaoId(),
+                sportTypeId = soccerDao.getDaoId(),
             )
-            sportsFieldSportTypeRepository.save(
-                SportsFieldSportTypeDao(
-                    sportsFieldId = viennaSportsFieldDao.getDaoId(),
-                    sportTypeId = basketballDao.getDaoId(),
-                ),
+            testDataBuilder.buildSportsFieldSportsType(
+                sportsFieldId = viennaSportsFieldDao.getDaoId(),
+                sportTypeId = basketballDao.getDaoId(),
             )
             val paginationInput = PaginationInput(1, 10)
             val filtersInput = SportsFieldFiltersInput(sportTypes = listOf(SportType.BASKETBALL))
@@ -254,44 +210,38 @@ class SportsFieldsQueryIntegrationTest : BaseIntegrationTest() {
     }
 
     @Test
-    fun `given some sports fields in db when get then return them`() {
+    fun `given some sports fields in db when get with no filters then return them`() {
         runBlocking {
             Given()
-            sportsFieldRepository.save(
-                SportsFieldDao(
-                    name = "Field 1",
-                    latitude = 48.1486,
-                    longitude = 17.1077,
-                    city = "Bratislava",
-                    street = "Hlavná 1",
-                    zipCode = "81101",
-                    countryCode = "SVK",
-                    description = "Test field 1",
-                ),
+            testDataBuilder.buildSportsField(
+                name = "Field 1",
+                latitude = 48.1486,
+                longitude = 17.1077,
+                city = "Bratislava",
+                street = "Hlavná 1",
+                zipCode = "81101",
+                countryCode = "SVK",
+                description = "Test field 1",
             )
-            sportsFieldRepository.save(
-                SportsFieldDao(
-                    name = "Field 2",
-                    latitude = 48.2089,
-                    longitude = 16.3726,
-                    city = "Vienna",
-                    street = "Hauptstrasse 2",
-                    zipCode = "1010",
-                    countryCode = "AUT",
-                    description = "Test field 2",
-                ),
+            testDataBuilder.buildSportsField(
+                name = "Field 2",
+                latitude = 48.2089,
+                longitude = 16.3726,
+                city = "Vienna",
+                street = "Hauptstrasse 2",
+                zipCode = "1010",
+                countryCode = "AUT",
+                description = "Test field 2",
             )
-            sportsFieldRepository.save(
-                SportsFieldDao(
-                    name = "Field 3",
-                    latitude = 50.0755,
-                    longitude = 14.4378,
-                    city = "Prague",
-                    street = "Hlavní 3",
-                    zipCode = "11000",
-                    countryCode = "CZE",
-                    description = "Test field 3",
-                ),
+            testDataBuilder.buildSportsField(
+                name = "Field 3",
+                latitude = 50.0755,
+                longitude = 14.4378,
+                city = "Prague",
+                street = "Hlavní 3",
+                zipCode = "11000",
+                countryCode = "CZE",
+                description = "Test field 3",
             )
             val paginationInput = PaginationInput(1, 2)
 
@@ -313,41 +263,35 @@ class SportsFieldsQueryIntegrationTest : BaseIntegrationTest() {
     fun `given sports fields in db when sort by name asc then return fields sorted by name in ascending order`() {
         runBlocking {
             Given()
-            sportsFieldRepository.save(
-                SportsFieldDao(
-                    name = "Field C",
-                    latitude = 48.1486,
-                    longitude = 17.1077,
-                    city = "Bratislava",
-                    street = "Hlavná 1",
-                    zipCode = "81101",
-                    countryCode = "SVK",
-                    description = "Test field C",
-                ),
+            testDataBuilder.buildSportsField(
+                name = "Field C",
+                latitude = 48.1486,
+                longitude = 17.1077,
+                city = "Bratislava",
+                street = "Hlavná 1",
+                zipCode = "81101",
+                countryCode = "SVK",
+                description = "Test field C",
             )
-            sportsFieldRepository.save(
-                SportsFieldDao(
-                    name = "Field A",
-                    latitude = 48.2089,
-                    longitude = 16.3726,
-                    city = "Vienna",
-                    street = "Hauptstrasse 2",
-                    zipCode = "1010",
-                    countryCode = "AUT",
-                    description = "Test field A",
-                ),
+            testDataBuilder.buildSportsField(
+                name = "Field A",
+                latitude = 48.2089,
+                longitude = 16.3726,
+                city = "Vienna",
+                street = "Hauptstrasse 2",
+                zipCode = "1010",
+                countryCode = "AUT",
+                description = "Test field A",
             )
-            sportsFieldRepository.save(
-                SportsFieldDao(
-                    name = "Field B",
-                    latitude = 50.0755,
-                    longitude = 14.4378,
-                    city = "Prague",
-                    street = "Hlavní 3",
-                    zipCode = "11000",
-                    countryCode = "CZE",
-                    description = "Test field B",
-                ),
+            testDataBuilder.buildSportsField(
+                name = "Field B",
+                latitude = 50.0755,
+                longitude = 14.4378,
+                city = "Prague",
+                street = "Hlavní 3",
+                zipCode = "11000",
+                countryCode = "CZE",
+                description = "Test field B",
             )
             val paginationInput = PaginationInput(1, 2)
             val sortByInput =
@@ -375,41 +319,35 @@ class SportsFieldsQueryIntegrationTest : BaseIntegrationTest() {
     fun `given sports fields in db when sort by name desc filter by city then return fields filtered and sorted by name in descending order`() {
         runBlocking {
             Given()
-            sportsFieldRepository.save(
-                SportsFieldDao(
-                    name = "Field C",
-                    latitude = 48.1486,
-                    longitude = 17.1077,
-                    city = "Bratislava",
-                    street = "Hlavná 1",
-                    zipCode = "81101",
-                    countryCode = "SVK",
-                    description = "Test field C",
-                ),
+            testDataBuilder.buildSportsField(
+                name = "Field C",
+                latitude = 48.1486,
+                longitude = 17.1077,
+                city = "Bratislava",
+                street = "Hlavná 1",
+                zipCode = "81101",
+                countryCode = "SVK",
+                description = "Test field C",
             )
-            sportsFieldRepository.save(
-                SportsFieldDao(
-                    name = "Field A",
-                    latitude = 48.1487,
-                    longitude = 17.1078,
-                    city = "Bratislava",
-                    street = "Hlavná 2",
-                    zipCode = "81101",
-                    countryCode = "SVK",
-                    description = "Test field A",
-                ),
+            testDataBuilder.buildSportsField(
+                name = "Field A",
+                latitude = 48.1487,
+                longitude = 17.1078,
+                city = "Bratislava",
+                street = "Hlavná 2",
+                zipCode = "81101",
+                countryCode = "SVK",
+                description = "Test field A",
             )
-            sportsFieldRepository.save(
-                SportsFieldDao(
-                    name = "Field B",
-                    latitude = 50.0755,
-                    longitude = 14.4378,
-                    city = "Prague",
-                    street = "Hlavní 3",
-                    zipCode = "11000",
-                    countryCode = "CZE",
-                    description = "Test field B",
-                ),
+            testDataBuilder.buildSportsField(
+                name = "Field B",
+                latitude = 50.0755,
+                longitude = 14.4378,
+                city = "Prague",
+                street = "Hlavní 3",
+                zipCode = "11000",
+                countryCode = "CZE",
+                description = "Test field B",
             )
             val paginationInput = PaginationInput(1, 10)
             val sortByInput =

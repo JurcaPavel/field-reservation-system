@@ -2,11 +2,7 @@ package cz.jurca.fieldreservationsystem
 
 import com.netflix.graphql.dgs.DgsQueryExecutor
 import com.netflix.graphql.dgs.test.EnableDgsTest
-import cz.jurca.fieldreservationsystem.repository.SportTypeRepository
-import cz.jurca.fieldreservationsystem.repository.SportsFieldRepository
-import cz.jurca.fieldreservationsystem.repository.SportsFieldSportTypeRepository
 import io.kotest.extensions.spring.SpringExtension
-import kotlinx.coroutines.runBlocking
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.test.context.ActiveProfiles
@@ -50,21 +46,14 @@ abstract class BaseIntegrationTest : BaseTest() {
     protected lateinit var dgsQueryExecutor: DgsQueryExecutor
 
     @Autowired
-    protected lateinit var sportsFieldRepository: SportsFieldRepository
+    protected lateinit var testDataBuilder: TestDataBuilder
 
     @Autowired
-    protected lateinit var sportTypeRepository: SportTypeRepository
-
-    @Autowired
-    protected lateinit var sportsFieldSportTypeRepository: SportsFieldSportTypeRepository
+    protected lateinit var repository: TestRepository
 
     @BeforeEach
-    fun cleanupDatabase() {
-        //todo move to testdatabuilder
-        runBlocking {
-            sportsFieldSportTypeRepository.deleteAll()
-            sportTypeRepository.deleteAll()
-            sportsFieldRepository.deleteAll()
-        }
+    fun prepareTestCase() {
+        testDataBuilder.deleteAll()
+        testDataBuilder.buildInitialData()
     }
 }

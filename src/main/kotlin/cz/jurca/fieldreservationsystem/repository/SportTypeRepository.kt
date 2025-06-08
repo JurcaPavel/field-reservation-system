@@ -20,6 +20,8 @@ interface SportTypeRepository : CoroutineCrudRepository<SportTypeDao, Int> {
     suspend fun findAllBySportsFieldId(sportsFieldId: Int): List<SportTypeDao>
 
     suspend fun findAllByNameIn(names: List<String>): List<SportTypeDao>
+
+    suspend fun findByName(name: String): SportTypeDao?
 }
 
 @Table("sport_type")
