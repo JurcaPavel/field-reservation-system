@@ -26,38 +26,40 @@ class TestDataBuilder(
         longitude: Double = 14.412209,
         description: String? = "Skvělé hřiště uprostřed Karlova mostu!",
         sportTypes: List<SportType> = listOf(SportType.SOCCER, SportType.BASKETBALL),
-    ): SportsFieldDao = repository.saveSportsField(
-        SportsFieldDao(
-            name = name,
-            city = city,
-            street = street,
-            zipCode = zipCode,
-            countryCode = countryCode,
-            latitude = latitude,
-            longitude = longitude,
-            description = description
-        )
-    ).let {
-        sportTypes.forEach { sportType ->
-            repository.saveSportsFieldSportsType(
-                SportsFieldSportTypeDao(
-                    sportsFieldId = it.getDaoId(),
-                    sportTypeId = repository.findSportTypeByName(sportType.name).getDaoId()
+    ): SportsFieldDao =
+        repository.saveSportsField(
+            SportsFieldDao(
+                name = name,
+                city = city,
+                street = street,
+                zipCode = zipCode,
+                countryCode = countryCode,
+                latitude = latitude,
+                longitude = longitude,
+                description = description,
+            ),
+        ).let {
+            sportTypes.forEach { sportType ->
+                repository.saveSportsFieldSportsType(
+                    SportsFieldSportTypeDao(
+                        sportsFieldId = it.getDaoId(),
+                        sportTypeId = repository.findSportTypeByName(sportType.name).getDaoId(),
+                    ),
                 )
-            )
+            }
+            it
         }
-        it
-    }
 
     fun buildSportsFieldSportsType(
         sportsFieldId: Int,
         sportTypeId: Int,
-    ): SportsFieldSportTypeDao = repository.saveSportsFieldSportsType(
-        SportsFieldSportTypeDao(
-            sportsFieldId = sportsFieldId,
-            sportTypeId = sportTypeId
+    ): SportsFieldSportTypeDao =
+        repository.saveSportsFieldSportsType(
+            SportsFieldSportTypeDao(
+                sportsFieldId = sportsFieldId,
+                sportTypeId = sportTypeId,
+            ),
         )
-    )
 
     fun buildSportType(name: String): SportTypeDao = repository.saveSportType(name)
 
