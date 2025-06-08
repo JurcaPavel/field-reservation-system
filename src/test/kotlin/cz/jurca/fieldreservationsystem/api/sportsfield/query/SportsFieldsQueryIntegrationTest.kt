@@ -39,8 +39,8 @@ class SportsFieldsQueryIntegrationTest : BaseIntegrationTest() {
     fun `given some sports fields in db when page number is too high then return empty response`() {
         runBlocking {
             Given()
-            testDataBuilder.buildSportsField(name = "Field 1")
-            testDataBuilder.buildSportsField(name = "Field 2")
+            dataBuilder.buildSportsField(name = "Field 1")
+            dataBuilder.buildSportsField(name = "Field 2")
             val paginationInput = PaginationInput(10, 10)
 
             When()
@@ -61,7 +61,7 @@ class SportsFieldsQueryIntegrationTest : BaseIntegrationTest() {
     fun `given sports fields in db when filter by country then return only matching fields`() {
         runBlocking {
             Given()
-            testDataBuilder.buildSportsField(
+            dataBuilder.buildSportsField(
                 name = "Field 1",
                 latitude = 48.1486,
                 longitude = 17.1077,
@@ -71,7 +71,7 @@ class SportsFieldsQueryIntegrationTest : BaseIntegrationTest() {
                 countryCode = "SVK",
                 description = "Test field 1",
             )
-            testDataBuilder.buildSportsField(
+            dataBuilder.buildSportsField(
                 name = "Field 2",
                 latitude = 48.2089,
                 longitude = 16.3726,
@@ -81,7 +81,7 @@ class SportsFieldsQueryIntegrationTest : BaseIntegrationTest() {
                 countryCode = "AUT",
                 description = "Test field 2",
             )
-            testDataBuilder.buildSportsField(
+            dataBuilder.buildSportsField(
                 name = "Field 3",
                 latitude = 50.0755,
                 longitude = 14.4378,
@@ -113,7 +113,7 @@ class SportsFieldsQueryIntegrationTest : BaseIntegrationTest() {
     fun `given sports fields in db when filter by city then return only matching fields`() {
         runBlocking {
             Given()
-            testDataBuilder.buildSportsField(
+            dataBuilder.buildSportsField(
                 name = "Field 1",
                 latitude = 48.1486,
                 longitude = 17.1077,
@@ -123,7 +123,7 @@ class SportsFieldsQueryIntegrationTest : BaseIntegrationTest() {
                 countryCode = "SVK",
                 description = "Test field 1",
             )
-            testDataBuilder.buildSportsField(
+            dataBuilder.buildSportsField(
                 name = "Field 2",
                 latitude = 48.2089,
                 longitude = 16.3726,
@@ -158,7 +158,7 @@ class SportsFieldsQueryIntegrationTest : BaseIntegrationTest() {
         runBlocking {
             Given()
             val bratislavaSportsFieldDao =
-                testDataBuilder.buildSportsField(
+                dataBuilder.buildSportsField(
                     name = "Field 1",
                     latitude = 48.1486,
                     longitude = 17.1077,
@@ -169,7 +169,7 @@ class SportsFieldsQueryIntegrationTest : BaseIntegrationTest() {
                     description = "Test field 1",
                 )
             val viennaSportsFieldDao =
-                testDataBuilder.buildSportsField(
+                dataBuilder.buildSportsField(
                     name = "Field 2",
                     latitude = 48.2089,
                     longitude = 16.3726,
@@ -181,11 +181,11 @@ class SportsFieldsQueryIntegrationTest : BaseIntegrationTest() {
                 )
             val soccerDao = repository.findSportTypeByName(SportType.SOCCER.name)
             val basketballDao = repository.findSportTypeByName(SportType.BASKETBALL.name)
-            testDataBuilder.buildSportsFieldSportsType(
+            dataBuilder.buildSportsFieldSportsType(
                 sportsFieldId = bratislavaSportsFieldDao.getDaoId(),
                 sportTypeId = soccerDao.getDaoId(),
             )
-            testDataBuilder.buildSportsFieldSportsType(
+            dataBuilder.buildSportsFieldSportsType(
                 sportsFieldId = viennaSportsFieldDao.getDaoId(),
                 sportTypeId = basketballDao.getDaoId(),
             )
@@ -213,7 +213,7 @@ class SportsFieldsQueryIntegrationTest : BaseIntegrationTest() {
     fun `given some sports fields in db when get with no filters then return them`() {
         runBlocking {
             Given()
-            testDataBuilder.buildSportsField(
+            dataBuilder.buildSportsField(
                 name = "Field 1",
                 latitude = 48.1486,
                 longitude = 17.1077,
@@ -223,7 +223,7 @@ class SportsFieldsQueryIntegrationTest : BaseIntegrationTest() {
                 countryCode = "SVK",
                 description = "Test field 1",
             )
-            testDataBuilder.buildSportsField(
+            dataBuilder.buildSportsField(
                 name = "Field 2",
                 latitude = 48.2089,
                 longitude = 16.3726,
@@ -233,7 +233,7 @@ class SportsFieldsQueryIntegrationTest : BaseIntegrationTest() {
                 countryCode = "AUT",
                 description = "Test field 2",
             )
-            testDataBuilder.buildSportsField(
+            dataBuilder.buildSportsField(
                 name = "Field 3",
                 latitude = 50.0755,
                 longitude = 14.4378,
@@ -263,7 +263,7 @@ class SportsFieldsQueryIntegrationTest : BaseIntegrationTest() {
     fun `given sports fields in db when sort by name asc then return fields sorted by name in ascending order`() {
         runBlocking {
             Given()
-            testDataBuilder.buildSportsField(
+            dataBuilder.buildSportsField(
                 name = "Field C",
                 latitude = 48.1486,
                 longitude = 17.1077,
@@ -273,7 +273,7 @@ class SportsFieldsQueryIntegrationTest : BaseIntegrationTest() {
                 countryCode = "SVK",
                 description = "Test field C",
             )
-            testDataBuilder.buildSportsField(
+            dataBuilder.buildSportsField(
                 name = "Field A",
                 latitude = 48.2089,
                 longitude = 16.3726,
@@ -283,7 +283,7 @@ class SportsFieldsQueryIntegrationTest : BaseIntegrationTest() {
                 countryCode = "AUT",
                 description = "Test field A",
             )
-            testDataBuilder.buildSportsField(
+            dataBuilder.buildSportsField(
                 name = "Field B",
                 latitude = 50.0755,
                 longitude = 14.4378,
@@ -319,7 +319,7 @@ class SportsFieldsQueryIntegrationTest : BaseIntegrationTest() {
     fun `given sports fields in db when sort by name desc filter by city then return fields filtered and sorted by name in descending order`() {
         runBlocking {
             Given()
-            testDataBuilder.buildSportsField(
+            dataBuilder.buildSportsField(
                 name = "Field C",
                 latitude = 48.1486,
                 longitude = 17.1077,
@@ -329,7 +329,7 @@ class SportsFieldsQueryIntegrationTest : BaseIntegrationTest() {
                 countryCode = "SVK",
                 description = "Test field C",
             )
-            testDataBuilder.buildSportsField(
+            dataBuilder.buildSportsField(
                 name = "Field A",
                 latitude = 48.1487,
                 longitude = 17.1078,
@@ -339,7 +339,7 @@ class SportsFieldsQueryIntegrationTest : BaseIntegrationTest() {
                 countryCode = "SVK",
                 description = "Test field A",
             )
-            testDataBuilder.buildSportsField(
+            dataBuilder.buildSportsField(
                 name = "Field B",
                 latitude = 50.0755,
                 longitude = 14.4378,

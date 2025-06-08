@@ -6,6 +6,8 @@ import cz.jurca.fieldreservationsystem.repository.SportsFieldDao
 import cz.jurca.fieldreservationsystem.repository.SportsFieldRepository
 import cz.jurca.fieldreservationsystem.repository.SportsFieldSportTypeDao
 import cz.jurca.fieldreservationsystem.repository.SportsFieldSportTypeRepository
+import cz.jurca.fieldreservationsystem.repository.UserDao
+import cz.jurca.fieldreservationsystem.repository.UserRepository
 import kotlinx.coroutines.runBlocking
 import org.springframework.stereotype.Repository
 
@@ -14,12 +16,19 @@ class TestRepository(
     private val sportTypeRepository: SportTypeRepository,
     private val sportsFieldRepository: SportsFieldRepository,
     private val sportsFieldSportTypeRepository: SportsFieldSportTypeRepository,
+    private val userRepository: UserRepository,
 ) {
     fun deleteAll() =
         runBlocking {
             sportsFieldSportTypeRepository.deleteAll()
             sportTypeRepository.deleteAll()
             sportsFieldRepository.deleteAll()
+            userRepository.deleteAll()
+        }
+
+    fun saveUser(userDao: UserDao) =
+        runBlocking {
+            userRepository.save(userDao)
         }
 
     fun saveSportsField(sportsFieldDao: SportsFieldDao) =

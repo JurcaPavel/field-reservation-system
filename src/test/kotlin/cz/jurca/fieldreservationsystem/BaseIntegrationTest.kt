@@ -2,9 +2,13 @@ package cz.jurca.fieldreservationsystem
 
 import com.netflix.graphql.dgs.DgsQueryExecutor
 import com.netflix.graphql.dgs.test.EnableDgsTest
+import cz.jurca.fieldreservationsystem.configuration.SecurityConfiguration
+import cz.jurca.fieldreservationsystem.repository.UserDao
 import io.kotest.extensions.spring.SpringExtension
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
+import org.springframework.security.test.context.TestSecurityContextHolder
 import org.springframework.test.context.ActiveProfiles
 import org.springframework.test.context.DynamicPropertyRegistry
 import org.springframework.test.context.DynamicPropertySource
@@ -46,14 +50,26 @@ abstract class BaseIntegrationTest : BaseTest() {
     protected lateinit var dgsQueryExecutor: DgsQueryExecutor
 
     @Autowired
-    protected lateinit var testDataBuilder: TestDataBuilder
+    protected lateinit var dataBuilder: TestDataBuilder
 
     @Autowired
     protected lateinit var repository: TestRepository
 
     @BeforeEach
     fun prepareTestCase() {
-        testDataBuilder.deleteAll()
-        testDataBuilder.buildInitialData()
+        dataBuilder.deleteAll()
+        dataBuilder.buildInitialData()
+    }
+
+    protected fun setUserInTestSecurityContextHolder(user: UserDao) {
+        val userDetails =
+            SecurityConfiguration.CustomUserDetails(
+                id = user.getDaoId(),
+                username = user.username,
+                password = user.password,
+                role = user.role,
+            )
+        val authentication = UsernamePasswordAuthenticationToken(userDetails, null, userDetails.authorities)
+        TestSecurityContextHolder.getContext().authentication = authentication
     }
 }

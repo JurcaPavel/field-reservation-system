@@ -31,6 +31,7 @@ data class SportsFieldDao(
     val zipCode: String,
     val countryCode: String,
     val description: String?,
+    val managerId: Int,
 ) {
     @Id
     private var id: Int? = null

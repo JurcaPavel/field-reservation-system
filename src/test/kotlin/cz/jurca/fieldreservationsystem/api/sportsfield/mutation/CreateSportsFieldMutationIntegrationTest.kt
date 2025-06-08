@@ -16,6 +16,7 @@ class CreateSportsFieldMutationIntegrationTest : BaseIntegrationTest() {
     fun ` when create sports field then return created Sports field`() =
         runBlocking {
             Given()
+            setUserInTestSecurityContextHolder(dataBuilder.defaultAdmin)
             val input =
                 CreateSportsFieldInput(
                     name = "New Sports Field",
@@ -52,13 +53,12 @@ class CreateSportsFieldMutationIntegrationTest : BaseIntegrationTest() {
             }
         }
 
-    // TODO later when users are implemented
-    @Ignore
     @Test
     fun `given user not manager or admin when create sports field then return NotManagerOrAdminError`() =
         runBlocking {
             Given()
-            // TODO create a user that is not a manager or admin and use its auth with request
+            val basicUserDao = dataBuilder.buildUser(username = "pjb", email = "basic@email.com", role = "BASIC")
+            setUserInTestSecurityContextHolder(basicUserDao)
             val input =
                 CreateSportsFieldInput(
                     name = "New Sports Field",
@@ -80,7 +80,7 @@ class CreateSportsFieldMutationIntegrationTest : BaseIntegrationTest() {
                 )
 
             Then()
-            response.message shouldBe "Only manager or admin can create a sports field."
+            response.message shouldBe "Only field manager or admin can create sports field"
         }
 
     private val createSportsFieldMutationRequest: (createSportsFieldInput: CreateSportsFieldInput) -> String = { input ->

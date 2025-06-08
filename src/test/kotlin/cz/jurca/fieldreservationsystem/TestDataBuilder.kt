@@ -4,17 +4,42 @@ import cz.jurca.fieldreservationsystem.domain.SportType
 import cz.jurca.fieldreservationsystem.repository.SportTypeDao
 import cz.jurca.fieldreservationsystem.repository.SportsFieldDao
 import cz.jurca.fieldreservationsystem.repository.SportsFieldSportTypeDao
+import cz.jurca.fieldreservationsystem.repository.UserDao
+import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Component
 
 @Component
 class TestDataBuilder(
+    private val passwordEncoder: PasswordEncoder,
     private val repository: TestRepository,
 ) {
     fun deleteAll() = repository.deleteAll()
 
+    lateinit var defaultAdmin: UserDao
+    lateinit var defaultManager: UserDao
+
     fun buildInitialData() {
         buildDefaultSportTypes()
+        defaultAdmin = buildUser()
+        defaultManager = buildUser(username = "pjm", email = "manager@email.com", role = "MANAGER")
     }
+
+    fun buildUser(
+        name: String = "Pavel Jurča",
+        username: String = "pja",
+        email: String = "admin@email.com",
+        password: String = "userpassword",
+        role: String = "ADMIN",
+    ): UserDao =
+        repository.saveUser(
+            UserDao(
+                name = name,
+                username = username,
+                email = email,
+                password = passwordEncoder.encode(password),
+                role = role,
+            ),
+        )
 
     fun buildSportsField(
         name: String = "Hřiště na Karlově mostě",
@@ -37,6 +62,7 @@ class TestDataBuilder(
                 latitude = latitude,
                 longitude = longitude,
                 description = description,
+                managerId = defaultManager.getDaoId(),
             ),
         ).let {
             sportTypes.forEach { sportType ->
