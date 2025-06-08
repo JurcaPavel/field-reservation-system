@@ -11,7 +11,7 @@ class ZipCodeTest : StringSpec({
         forAll(
             row("76005", false),
             row("", true),
-            row("   ", true)
+            row("   ", true),
         ) { zipCode, shouldThrow ->
             if (shouldThrow) {
                 val exception = shouldThrow<IllegalArgumentException> { ZipCode(zipCode) }

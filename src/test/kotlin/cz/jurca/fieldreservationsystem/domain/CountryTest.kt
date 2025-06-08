@@ -5,7 +5,6 @@ import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.matchers.shouldBe
 
 class CountryTest : BaseTest() {
-
     @Test
     fun `given valid alpha code when finding country by code then correct country should be returned`() {
         Given()
@@ -37,14 +36,14 @@ class CountryTest : BaseTest() {
         val tooShort = "US"
 
         When()
-        val exceptionTooShort = shouldThrow<IllegalArgumentException> {
-            Country.AlphaCode3(tooShort)
-        }
+        val exceptionTooShort =
+            shouldThrow<IllegalArgumentException> {
+                Country.AlphaCode3(tooShort)
+            }
 
         Then()
         exceptionTooShort.message shouldBe "Alpha code 3 must be exactly 3 characters long"
     }
-
 
     @Test
     fun `given long alpha code string when creating alpha code 3 then exception should have correct message`() {
@@ -52,9 +51,10 @@ class CountryTest : BaseTest() {
         val tooLong = "USAA"
 
         When()
-        val exceptionTooLong = shouldThrow<IllegalArgumentException> {
-            Country.AlphaCode3(tooLong)
-        }
+        val exceptionTooLong =
+            shouldThrow<IllegalArgumentException> {
+                Country.AlphaCode3(tooLong)
+            }
 
         Then()
         exceptionTooLong.message shouldBe "Alpha code 3 must be exactly 3 characters long"

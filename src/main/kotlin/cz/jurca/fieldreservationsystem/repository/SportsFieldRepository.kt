@@ -2,8 +2,11 @@ package cz.jurca.fieldreservationsystem.repository
 
 import cz.jurca.fieldreservationsystem.domain.Address
 import cz.jurca.fieldreservationsystem.domain.City
+import cz.jurca.fieldreservationsystem.domain.Coordinates
 import cz.jurca.fieldreservationsystem.domain.Country
 import cz.jurca.fieldreservationsystem.domain.Description
+import cz.jurca.fieldreservationsystem.domain.Latitude
+import cz.jurca.fieldreservationsystem.domain.Longitude
 import cz.jurca.fieldreservationsystem.domain.Name
 import cz.jurca.fieldreservationsystem.domain.SportType
 import cz.jurca.fieldreservationsystem.domain.SportsField
@@ -48,8 +51,7 @@ data class SportsFieldDao(
                     zipCode = ZipCode(zipCode),
                     country = requireNotNull(Country.findByCode(Country.AlphaCode3(countryCode))),
                 ),
-            latitude = latitude,
-            longitude = longitude,
+            coordinates = Coordinates(Latitude(latitude), Longitude(longitude)),
             description = description?.let { Description(it) },
             sportTypes = sportTypes,
         )

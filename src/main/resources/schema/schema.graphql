@@ -13,8 +13,8 @@ type Query {
 }
 
 type Mutation {
-  createSportsField(input: CreateSportsFieldInput!): SportsField!
-  editSportsField(id: ID!, input: EditSportsFieldInput!): SportsField!
+  createSportsField(input: CreateSportsFieldInput!): CreateSportsFieldResult!
+  editSportsField(id: ID!, input: EditSportsFieldInput!): EditSportsFieldResult!
 }
 
 #
@@ -45,6 +45,8 @@ input CreateSportsFieldInput {
   street: String!
   zipCode: String!
   countryCode: String!
+  sportTypes: [SportType!]!
+  description: String
 }
 
 input EditSportsFieldInput {
@@ -78,6 +80,10 @@ type SportsFieldsWrapper {
   sportsFields: [SportsField!]!
   paginationInfo: PaginationInfo!
 }
+
+union CreateSportsFieldResult = SportsField | NotManagerOrAdminError
+
+union EditSportsFieldResult = SportsField | NotFoundError | NotResourceOwnerError
 
 #
 # Location
@@ -119,5 +125,13 @@ enum SortByDirection {
 }
 
 type NotFoundError {
+  message: String!
+}
+
+type NotManagerOrAdminError {
+  message: String!
+}
+
+type NotResourceOwnerError {
   message: String!
 }

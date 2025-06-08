@@ -1,13 +1,15 @@
-# Field Reservation System
+# Sports Field Reservation System
 
 A sports field reservation system built with Kotlin and Spring Boot.
 
 ## Description
 
 This application provides a platform for managing sports field reservations. It allows users to view available sports fields and make reservations for specific time slots. Managers can manage their fields and reservations.
-The application is written in reactive style using Kotlin coroutines and R2DBC for database access. It uses GraphQL for the API layer.
-Domain driven design principles are applied to ensure a good maintainability.
-Testing is done using Kotest for unit tests and TestContainers for integration tests with a real PostgreSQL database.
+
+## Technical Overview
+The application is written in reactive style using Kotlin coroutines and R2DBC for database access. It uses GraphQL for the API layer.  
+Domain driven design principles are applied to ensure a good maintainability.  
+Testing is done using Kotest for unit tests and Dgs tooling + TestContainers for integration tests with a real PostgreSQL database.
 
 ## Technologies Used
 

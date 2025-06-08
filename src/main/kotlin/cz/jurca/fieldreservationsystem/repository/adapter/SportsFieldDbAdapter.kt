@@ -3,9 +3,13 @@ package cz.jurca.fieldreservationsystem.repository.adapter
 import cz.jurca.fieldreservationsystem.codegen.types.SortByDirection
 import cz.jurca.fieldreservationsystem.domain.Address
 import cz.jurca.fieldreservationsystem.domain.City
+import cz.jurca.fieldreservationsystem.domain.Coordinates
 import cz.jurca.fieldreservationsystem.domain.Country
 import cz.jurca.fieldreservationsystem.domain.Description
+import cz.jurca.fieldreservationsystem.domain.Latitude
+import cz.jurca.fieldreservationsystem.domain.Longitude
 import cz.jurca.fieldreservationsystem.domain.Name
+import cz.jurca.fieldreservationsystem.domain.NewOrUpdatedSportsField
 import cz.jurca.fieldreservationsystem.domain.Page
 import cz.jurca.fieldreservationsystem.domain.SportType
 import cz.jurca.fieldreservationsystem.domain.SportsField
@@ -18,6 +22,8 @@ import cz.jurca.fieldreservationsystem.domain.ZipCode
 import cz.jurca.fieldreservationsystem.repository.SportTypeRepository
 import cz.jurca.fieldreservationsystem.repository.SportsFieldDao
 import cz.jurca.fieldreservationsystem.repository.SportsFieldRepository
+import cz.jurca.fieldreservationsystem.repository.SportsFieldSportTypeDao
+import cz.jurca.fieldreservationsystem.repository.SportsFieldSportTypeRepository
 import kotlinx.coroutines.reactor.awaitSingle
 import org.springframework.data.domain.PageRequest
 import org.springframework.data.domain.Sort
@@ -25,11 +31,13 @@ import org.springframework.data.r2dbc.core.R2dbcEntityTemplate
 import org.springframework.data.relational.core.query.Criteria
 import org.springframework.data.relational.core.query.Query
 import org.springframework.stereotype.Component
+import org.springframework.transaction.annotation.Transactional
 
 @Component
 class SportsFieldDbAdapter(
     private val sportsFieldRepository: SportsFieldRepository,
     private val sportTypeRepository: SportTypeRepository,
+    private val sportsFieldSportTypeRepository: SportsFieldSportTypeRepository,
     private val r2dbcEntityTemplate: R2dbcEntityTemplate,
 ) {
     suspend fun findSportsField(id: UnvalidatedSportsFieldId) = sportsFieldRepository.findById(id.value)?.run { SportsFieldId(this.getDaoId(), this@SportsFieldDbAdapter::getDetail) }
@@ -42,8 +50,7 @@ class SportsFieldDbAdapter(
                 sportTypes = findSportTypesOfSportsField(id.value),
                 description = dao.description?.let { Description(it) },
                 address = Address(City(dao.city), Street(dao.street), ZipCode(dao.zipCode), requireNotNull(Country.findByCode(Country.AlphaCode3(dao.countryCode)))),
-                latitude = dao.latitude,
-                longitude = dao.longitude,
+                coordinates = Coordinates(Latitude(dao.latitude), Longitude(dao.longitude)),
             )
         }
 
@@ -83,10 +90,40 @@ class SportsFieldDbAdapter(
         )
     }
 
+    @Transactional
+    suspend fun create(newSportsField: NewOrUpdatedSportsField): SportsField {
+        val sportsFieldDao =
+            sportsFieldRepository.save(
+                SportsFieldDao(
+                    newSportsField.name.value,
+                    newSportsField.coordinates.latitude.value,
+                    newSportsField.coordinates.longitude.value,
+                    newSportsField.address.city.value,
+                    newSportsField.address.street.value,
+                    newSportsField.address.zipCode.value,
+                    newSportsField.address.country.alphaCode3.value,
+                    newSportsField.description?.value,
+                ),
+            )
+        sportTypeRepository.findAllByNameIn(newSportsField.sportTypes.map { sportType -> sportType.name })
+            .forEach { sportTypeDao ->
+                sportsFieldSportTypeRepository.save(
+                    SportsFieldSportTypeDao(
+                        sportsFieldDao.getDaoId(),
+                        sportTypeDao.getDaoId(),
+                    ),
+                )
+            }
+
+        return sportsFieldDao.toDomain(this::getDetail, newSportsField.sportTypes)
+    }
+
+    suspend fun update(updatedSportsField: NewOrUpdatedSportsField): SportsField = TODO()
+
     private suspend fun findSportTypesOfSportsField(sportsFieldId: Int): List<SportType> =
         sportTypeRepository.findAllBySportsFieldId(sportsFieldId).let { sportTypeDaos ->
             sportTypeDaos.map { sportTypeDao ->
-                SportType.valueOf(sportTypeDao.name)
+                sportTypeDao.toDomain()
             }
         }
 }

@@ -60,6 +60,7 @@ abstract class BaseIntegrationTest : BaseTest() {
 
     @BeforeEach
     fun cleanupDatabase() {
+        //todo move to testdatabuilder
         runBlocking {
             sportsFieldSportTypeRepository.deleteAll()
             sportTypeRepository.deleteAll()

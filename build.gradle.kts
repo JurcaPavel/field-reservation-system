@@ -28,12 +28,15 @@ private val kotestVersion = "5.9.1"
 private val kotestExtensionsSpring = "1.3.0"
 private val kotestAssertionsArrow = "2.0.0"
 private val oshaiKotlinLogging = "7.0.7"
+private val arrowKtVersion = "2.1.2"
 
 dependencies {
     implementation("org.springframework.boot:spring-boot-starter-actuator")
     implementation("org.springframework.boot:spring-boot-starter-data-r2dbc")
     implementation("org.springframework.boot:spring-boot-starter-security")
     implementation("org.springframework.boot:spring-boot-starter-webflux")
+    implementation("io.arrow-kt:arrow-core:$arrowKtVersion")
+    implementation("io.arrow-kt:arrow-fx-coroutines:$arrowKtVersion")
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
     implementation("io.github.oshai:kotlin-logging-jvm:$oshaiKotlinLogging")
     implementation("com.netflix.graphql.dgs:graphql-dgs-spring-graphql-starter")
@@ -58,6 +61,7 @@ dependencies {
     testImplementation("io.kotest:kotest-runner-junit5:$kotestVersion")
     testImplementation("io.kotest:kotest-assertions-core:$kotestVersion")
     testImplementation("io.kotest:kotest-assertions-json:$kotestVersion")
+    testImplementation("io.kotest.extensions:kotest-assertions-arrow:2.0.0")
 }
 
 dependencyManagement {

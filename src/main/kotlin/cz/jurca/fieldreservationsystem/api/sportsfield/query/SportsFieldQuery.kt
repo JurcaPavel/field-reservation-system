@@ -23,12 +23,12 @@ class SportsFieldQuery(private val validator: IdValidator) {
                         SportsField(
                             id = { sportsField.id.value.toString() },
                             name = { sportsField.name.value },
-                            sportTypes = { sportsField.sportTypes.map { it.toApi() }},
-                            coordinates = { Coordinates({sportsField.latitude}, {sportsField.longitude}) },
+                            sportTypes = { sportsField.sportTypes.map { it.toApi() } },
+                            coordinates = { Coordinates({ sportsField.coordinates.latitude.value }, { sportsField.coordinates.longitude.value }) },
                             city = { sportsField.address.city.value },
-                            street = { sportsField.address.street?.value },
+                            street = { sportsField.address.street.value },
                             zipCode = { sportsField.address.zipCode.value },
-                            country = { Country({sportsField.address.country.alphaCode3.value}, {sportsField.address.country.countryName.value}) },
+                            country = { Country({ sportsField.address.country.alphaCode3.value }, { sportsField.address.country.countryName.value }) },
                             description = { sportsField.description?.value },
                         )
                     }

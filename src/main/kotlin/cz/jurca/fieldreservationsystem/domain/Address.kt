@@ -1,6 +1,6 @@
 package cz.jurca.fieldreservationsystem.domain
 
-data class Address(val city: City, val street: Street?, val zipCode: ZipCode, val country: Country)
+data class Address(val city: City, val street: Street, val zipCode: ZipCode, val country: Country)
 
 @JvmInline
 value class City(val value: String) {

@@ -11,7 +11,7 @@ class StreetTest : StringSpec({
         forAll(
             row("Tomáše Bati", false),
             row("", true),
-            row("   ", true)
+            row("   ", true),
         ) { streetName, shouldThrow ->
             if (shouldThrow) {
                 val exception = shouldThrow<IllegalArgumentException> { Street(streetName) }

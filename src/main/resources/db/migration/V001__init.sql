@@ -17,6 +17,7 @@ CREATE TABLE IF NOT EXISTS sport_type
   name VARCHAR(255)       NOT NULL,
   CONSTRAINT unique_sport_type_name UNIQUE (name)
 );
+CREATE UNIQUE INDEX IF NOT EXISTS unique_sport_type_name ON sport_type (name);
 
 INSERT INTO sport_type (name)
 VALUES ('BASKETBALL'),
