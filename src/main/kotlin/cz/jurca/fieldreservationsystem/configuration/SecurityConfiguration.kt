@@ -43,11 +43,6 @@ class SecurityConfiguration(
                 }
             }.authorizeExchange { exchanges ->
                 exchanges.pathMatchers("/public/authenticate").permitAll()
-                // todo: setup security
-                exchanges.pathMatchers("/graphiql").permitAll()
-                exchanges.pathMatchers("/public/graphql").permitAll()
-                exchanges.pathMatchers("/management/**").permitAll()
-                exchanges.pathMatchers("/private/**").permitAll()
                 exchanges.pathMatchers("/**").authenticated()
             }.httpBasic(Customizer.withDefaults())
 
