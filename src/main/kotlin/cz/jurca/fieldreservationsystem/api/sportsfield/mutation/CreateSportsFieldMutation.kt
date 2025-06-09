@@ -2,10 +2,10 @@ package cz.jurca.fieldreservationsystem.api.sportsfield.mutation
 
 import com.netflix.graphql.dgs.DgsComponent
 import com.netflix.graphql.dgs.DgsMutation
+import cz.jurca.fieldreservationsystem.api.toApi
 import cz.jurca.fieldreservationsystem.codegen.types.CreateSportsFieldInput
 import cz.jurca.fieldreservationsystem.codegen.types.CreateSportsFieldResult
 import cz.jurca.fieldreservationsystem.codegen.types.NotManagerOrAdminError
-import cz.jurca.fieldreservationsystem.codegen.types.SportsField
 import cz.jurca.fieldreservationsystem.domain.Address
 import cz.jurca.fieldreservationsystem.domain.City
 import cz.jurca.fieldreservationsystem.domain.Coordinates
@@ -37,21 +37,7 @@ class CreateSportsFieldMutation(
             loginUser = userProvider.getLoginUser().getOrThrow(),
             createSportsFieldProvider = sportsFieldDbAdapter::create,
         ).create().fold(
-            ifLeft = { error ->
-                NotManagerOrAdminError({ error.message })
-            },
-            ifRight = { sportsField ->
-                SportsField(
-                    id = { sportsField.id.value.toString() },
-                    name = { sportsField.name.value },
-                    sportTypes = { sportsField.sportTypes.map { it.toApi() } },
-                    coordinates = { cz.jurca.fieldreservationsystem.codegen.types.Coordinates({ sportsField.coordinates.latitude.value }, { sportsField.coordinates.longitude.value }) },
-                    city = { sportsField.address.city.value },
-                    street = { sportsField.address.street.value },
-                    zipCode = { sportsField.address.zipCode.value },
-                    country = { cz.jurca.fieldreservationsystem.codegen.types.Country({ sportsField.address.country.alphaCode3.value }, { sportsField.address.country.countryName.value }) },
-                    description = { sportsField.description?.value },
-                )
-            },
+            ifLeft = { error -> NotManagerOrAdminError({ error.message }) },
+            ifRight = { sportsField -> sportsField.toApi() },
         )
 }

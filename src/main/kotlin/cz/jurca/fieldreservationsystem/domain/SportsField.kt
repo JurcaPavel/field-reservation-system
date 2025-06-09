@@ -10,4 +10,5 @@ class SportsField(
     val description: Description?,
     val address: Address,
     val coordinates: Coordinates,
+    val managerId: UserId,
 )

@@ -12,6 +12,8 @@ import cz.jurca.fieldreservationsystem.domain.SportType
 import cz.jurca.fieldreservationsystem.domain.SportsField
 import cz.jurca.fieldreservationsystem.domain.SportsFieldId
 import cz.jurca.fieldreservationsystem.domain.Street
+import cz.jurca.fieldreservationsystem.domain.User
+import cz.jurca.fieldreservationsystem.domain.UserId
 import cz.jurca.fieldreservationsystem.domain.ZipCode
 import org.springframework.data.annotation.Id
 import org.springframework.data.relational.core.mapping.Table
@@ -23,14 +25,14 @@ interface SportsFieldRepository : CoroutineCrudRepository<SportsFieldDao, Int>
 
 @Table("sports_field")
 data class SportsFieldDao(
-    val name: String,
-    val latitude: Double,
-    val longitude: Double,
-    val city: String,
-    val street: String,
-    val zipCode: String,
-    val countryCode: String,
-    val description: String?,
+    var name: String,
+    var latitude: Double,
+    var longitude: Double,
+    var city: String,
+    var street: String,
+    var zipCode: String,
+    var countryCode: String,
+    var description: String?,
     val managerId: Int,
 ) {
     @Id
@@ -40,6 +42,7 @@ data class SportsFieldDao(
 
     fun toDomain(
         detailProvider: suspend (SportsFieldId) -> SportsField,
+        userDetailProvider: suspend (UserId) -> User,
         sportTypes: List<SportType>,
     ): SportsField {
         return SportsField(
@@ -55,6 +58,7 @@ data class SportsFieldDao(
             coordinates = Coordinates(Latitude(latitude), Longitude(longitude)),
             description = description?.let { Description(it) },
             sportTypes = sportTypes,
+            managerId = UserId(managerId, userDetailProvider),
         )
     }
 }

@@ -51,6 +51,7 @@ class TestDataBuilder(
         longitude: Double = 14.412209,
         description: String? = "Skvělé hřiště uprostřed Karlova mostu!",
         sportTypes: List<SportType> = listOf(SportType.SOCCER, SportType.BASKETBALL),
+        managerId: Int = defaultManager.getDaoId(),
     ): SportsFieldDao =
         repository.saveSportsField(
             SportsFieldDao(
@@ -62,7 +63,7 @@ class TestDataBuilder(
                 latitude = latitude,
                 longitude = longitude,
                 description = description,
-                managerId = defaultManager.getDaoId(),
+                managerId = managerId,
             ),
         ).let {
             sportTypes.forEach { sportType ->

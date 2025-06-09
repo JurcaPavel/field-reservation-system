@@ -56,6 +56,8 @@ input EditSportsFieldInput {
   street: String!
   zipCode: String!
   countryCode: String!
+  sportTypes: [SportType!]!
+  description: String
 }
 
 input SportsFieldFiltersInput {

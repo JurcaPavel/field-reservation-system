@@ -13,7 +13,7 @@ import kotlinx.coroutines.runBlocking
 
 class CreateSportsFieldMutationIntegrationTest : BaseIntegrationTest() {
     @Test
-    fun ` when create sports field then return created Sports field`() =
+    fun ` when create sports field then return created sports field`() =
         runBlocking {
             Given()
             setUserInTestSecurityContextHolder(dataBuilder.defaultAdmin)

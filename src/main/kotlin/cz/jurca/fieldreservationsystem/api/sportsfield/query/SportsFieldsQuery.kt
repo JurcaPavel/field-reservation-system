@@ -2,11 +2,9 @@ package cz.jurca.fieldreservationsystem.api.sportsfield.query
 
 import com.netflix.graphql.dgs.DgsComponent
 import com.netflix.graphql.dgs.DgsQuery
-import cz.jurca.fieldreservationsystem.codegen.types.Coordinates
-import cz.jurca.fieldreservationsystem.codegen.types.Country
+import cz.jurca.fieldreservationsystem.api.toApi
 import cz.jurca.fieldreservationsystem.codegen.types.PaginationInfo
 import cz.jurca.fieldreservationsystem.codegen.types.PaginationInput
-import cz.jurca.fieldreservationsystem.codegen.types.SportsField
 import cz.jurca.fieldreservationsystem.codegen.types.SportsFieldFiltersInput
 import cz.jurca.fieldreservationsystem.codegen.types.SportsFieldSortByInput
 import cz.jurca.fieldreservationsystem.codegen.types.SportsFieldsWrapper
@@ -42,23 +40,9 @@ class SportsFieldsQuery(private val sportsFieldDbAdapter: SportsFieldDbAdapter) 
                     )
                 },
         ).getData().let { page ->
-            SportsFieldsWrapper.Builder()
-                .withPaginationInfo(PaginationInfo.Builder().withItemsTotalCount(page.totalItems).build())
-                .withSportsFields(
-                    page.items.map { sportsField ->
-                        SportsField(
-                            id = { sportsField.id.value.toString() },
-                            name = { sportsField.name.value },
-                            sportTypes = { sportsField.sportTypes.map { it.toApi() } },
-                            coordinates = { Coordinates({ sportsField.coordinates.latitude.value }, { sportsField.coordinates.longitude.value }) },
-                            city = { sportsField.address.city.value },
-                            street = { sportsField.address.street.value },
-                            zipCode = { sportsField.address.zipCode.value },
-                            country = { Country({ sportsField.address.country.alphaCode3.value }, { sportsField.address.country.countryName.value }) },
-                            description = { sportsField.description?.value },
-                        )
-                    },
-                )
-                .build()
+            SportsFieldsWrapper(
+                sportsFields = { page.items.map { sportsField -> sportsField.toApi() } },
+                paginationInfo = { PaginationInfo({ page.totalItems }) },
+            )
         }
 }

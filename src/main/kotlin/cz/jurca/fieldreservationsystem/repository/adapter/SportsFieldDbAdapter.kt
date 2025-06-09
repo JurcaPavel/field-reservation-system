@@ -19,6 +19,7 @@ import cz.jurca.fieldreservationsystem.domain.Street
 import cz.jurca.fieldreservationsystem.domain.UnloadedFilteredPage
 import cz.jurca.fieldreservationsystem.domain.UnvalidatedSportsFieldId
 import cz.jurca.fieldreservationsystem.domain.UpdatedSportsField
+import cz.jurca.fieldreservationsystem.domain.UserId
 import cz.jurca.fieldreservationsystem.domain.ZipCode
 import cz.jurca.fieldreservationsystem.repository.SportTypeRepository
 import cz.jurca.fieldreservationsystem.repository.SportsFieldDao
@@ -39,6 +40,7 @@ class SportsFieldDbAdapter(
     private val sportsFieldRepository: SportsFieldRepository,
     private val sportTypeRepository: SportTypeRepository,
     private val sportsFieldSportTypeRepository: SportsFieldSportTypeRepository,
+    private val userDbAdapter: UserDbAdapter,
     private val r2dbcEntityTemplate: R2dbcEntityTemplate,
 ) {
     suspend fun findSportsField(id: UnvalidatedSportsFieldId): SportsFieldId? = sportsFieldRepository.findById(id.value)?.run { SportsFieldId(this.getDaoId(), this@SportsFieldDbAdapter::getDetail) }
@@ -52,6 +54,7 @@ class SportsFieldDbAdapter(
                 description = dao.description?.let { Description(it) },
                 address = Address(City(dao.city), Street(dao.street), ZipCode(dao.zipCode), requireNotNull(Country.findByCode(Country.AlphaCode3(dao.countryCode)))),
                 coordinates = Coordinates(Latitude(dao.latitude), Longitude(dao.longitude)),
+                managerId = UserId(dao.managerId, userDbAdapter::getDetail),
             )
         }
 
@@ -86,7 +89,7 @@ class SportsFieldDbAdapter(
         val totalItemsCount = r2dbcEntityTemplate.count(countQuery, SportsFieldDao::class.java).awaitSingle()
 
         return Page(
-            items = results.map { dao -> dao.toDomain(this::getDetail, findSportTypesOfSportsField(dao.getDaoId())) },
+            items = results.map { dao -> dao.toDomain(this::getDetail, userDbAdapter::getDetail, findSportTypesOfSportsField(dao.getDaoId())) },
             totalItems = totalItemsCount.toInt(),
         )
     }
@@ -117,10 +120,23 @@ class SportsFieldDbAdapter(
                 )
             }
 
-        return sportsFieldDao.toDomain(this::getDetail, newSportsField.sportTypes)
+        return sportsFieldDao.toDomain(this::getDetail, userDbAdapter::getDetail, newSportsField.sportTypes)
     }
 
-    suspend fun update(updatedSportsField: UpdatedSportsField): SportsField = TODO()
+    @Transactional
+    suspend fun update(updatedSportsField: UpdatedSportsField): SportsField =
+        requireNotNull(sportsFieldRepository.findById(updatedSportsField.id.value)).let { sportsFieldDao ->
+            sportsFieldDao.name = updatedSportsField.name.value
+            sportsFieldDao.latitude = updatedSportsField.coordinates.latitude.value
+            sportsFieldDao.longitude = updatedSportsField.coordinates.longitude.value
+            sportsFieldDao.city = updatedSportsField.address.city.value
+            sportsFieldDao.street = updatedSportsField.address.street.value
+            sportsFieldDao.zipCode = updatedSportsField.address.zipCode.value
+            sportsFieldDao.countryCode = updatedSportsField.address.country.alphaCode3.value
+            sportsFieldDao.description = updatedSportsField.description?.value
+            sportsFieldRepository.save(sportsFieldDao)
+            sportsFieldDao.toDomain(this::getDetail, userDbAdapter::getDetail, findSportTypesOfSportsField(sportsFieldDao.getDaoId()))
+        }
 
     private suspend fun findSportTypesOfSportsField(sportsFieldId: Int): List<SportType> =
         sportTypeRepository.findAllBySportsFieldId(sportsFieldId).let { sportTypeDaos ->
