@@ -3,6 +3,7 @@ package cz.jurca.fieldreservationsystem.api.sportsfield.mutation
 import com.netflix.graphql.dgs.DgsComponent
 import com.netflix.graphql.dgs.DgsMutation
 import cz.jurca.fieldreservationsystem.api.toApi
+import cz.jurca.fieldreservationsystem.cache.CacheProvider
 import cz.jurca.fieldreservationsystem.codegen.types.CreateSportsFieldInput
 import cz.jurca.fieldreservationsystem.codegen.types.CreateSportsFieldResult
 import cz.jurca.fieldreservationsystem.codegen.types.NotManagerOrAdminError
@@ -25,6 +26,7 @@ import cz.jurca.fieldreservationsystem.repository.adapter.SportsFieldDbAdapter
 class CreateSportsFieldMutation(
     private val sportsFieldDbAdapter: SportsFieldDbAdapter,
     private val userProvider: ProvidesLoginUser,
+    private val cacheProvider: CacheProvider,
 ) {
     @DgsMutation
     suspend fun createSportsField(input: CreateSportsFieldInput): CreateSportsFieldResult =
@@ -38,6 +40,6 @@ class CreateSportsFieldMutation(
             createSportsFieldProvider = sportsFieldDbAdapter::create,
         ).create().fold(
             ifLeft = { error -> NotManagerOrAdminError({ error.message }) },
-            ifRight = { sportsField -> sportsField.toApi() },
+            ifRight = { sportsField -> cacheProvider.put(sportsField.id.value.toString(), sportsField.toApi()) },
         )
 }

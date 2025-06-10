@@ -3,6 +3,7 @@ package cz.jurca.fieldreservationsystem.api.sportsfield.mutation
 import com.netflix.graphql.dgs.DgsComponent
 import com.netflix.graphql.dgs.DgsMutation
 import cz.jurca.fieldreservationsystem.api.toApi
+import cz.jurca.fieldreservationsystem.cache.CacheProvider
 import cz.jurca.fieldreservationsystem.codegen.types.EditSportsFieldInput
 import cz.jurca.fieldreservationsystem.codegen.types.EditSportsFieldResult
 import cz.jurca.fieldreservationsystem.domain.Address
@@ -33,6 +34,7 @@ class EditSportsFieldMutation(
     private val sportsFieldDbAdapter: SportsFieldDbAdapter,
     private val userProvider: ProvidesLoginUser,
     private val idValidator: IdValidator,
+    private val cacheProvider: CacheProvider,
 ) {
     @DgsMutation
     suspend fun editSportsField(
@@ -60,7 +62,7 @@ class EditSportsFieldMutation(
                     is NotFoundError -> ApiNotFoundError({ "Sports field with id $id not found" })
                 }
             },
-            ifRight = { sportsField -> sportsField.toApi() },
+            ifRight = { sportsField -> cacheProvider.put(id.toString(), sportsField.toApi()) },
         )
     }
 }

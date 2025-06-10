@@ -1,25 +1,33 @@
 package cz.jurca.fieldreservationsystem.cache
 
 import com.fasterxml.jackson.databind.ObjectMapper
+import io.github.oshai.kotlinlogging.KotlinLogging
 import kotlinx.coroutines.reactive.awaitFirst
 import kotlinx.coroutines.reactive.awaitFirstOrNull
-import org.springframework.context.annotation.Primary
 import org.springframework.context.annotation.Profile
 import org.springframework.data.redis.core.ReactiveRedisTemplate
 import org.springframework.stereotype.Component
+import reactor.core.publisher.Mono
 
-@Primary
 @Component
-@Profile("local")
-class LocalCacheProvider(
+@Profile("!test")
+class RedisCacheProvider(
     private val reactiveRedisTemplate: ReactiveRedisTemplate<String, String>,
     private val objectMapper: ObjectMapper,
 ) : CacheProvider {
+    private val logger = KotlinLogging.logger { }
+
     override suspend fun <T> get(
         key: String,
         clazz: Class<T>,
     ): T? {
-        val redisResponse = reactiveRedisTemplate.opsForValue().get(key).awaitFirstOrNull()
+        val redisResponse =
+            reactiveRedisTemplate.opsForValue().get(key)
+                .onErrorResume { e ->
+                    logger.error(e) { "Redis get operation failed for key: $key" }
+                    Mono.empty()
+                }
+                .awaitFirstOrNull()
         return redisResponse?.let { objectMapper.readValue(it, clazz) }
     }
 
@@ -28,7 +36,12 @@ class LocalCacheProvider(
         value: T,
     ): T {
         val json = objectMapper.writeValueAsString(value)
-        reactiveRedisTemplate.opsForValue().set(key, json).awaitFirst()
+        reactiveRedisTemplate.opsForValue().set(key, json)
+            .onErrorResume { e ->
+                logger.error(e) { "Redis set operation failed for key: $key" }
+                Mono.just(false)
+            }
+            .awaitFirst()
         return value
     }
 }
