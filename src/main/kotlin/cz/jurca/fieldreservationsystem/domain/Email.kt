@@ -16,7 +16,7 @@ class Email private constructor(
             }
 
         private fun isValidEmailFormat(email: String): Boolean {
-            val emailRegex = "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$".toRegex()
+            val emailRegex = "^[A-Za-z0-9+_][A-Za-z0-9+_.-]*@[A-Za-z0-9-]+(\\.[A-Za-z0-9-]+)*\\.[A-Za-z]{2,}$".toRegex()
             return email.matches(emailRegex)
         }
     }

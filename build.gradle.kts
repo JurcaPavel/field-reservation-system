@@ -86,8 +86,16 @@ tasks.bootJar {
     archiveFileName.set("field-reservation-system.jar")
 }
 
-tasks.withType<Test> {
-    useJUnitPlatform()
+// Required for Mockito with JDK 21+, see https://javadoc.io/doc/org.mockito/mockito-core/latest/org/mockito/Mockito.html#0.3
+val mockitoAgent = configurations.create("mockitoAgent")
+dependencies {
+    mockitoAgent("org.mockito:mockito-core") { isTransitive = false }
+}
+tasks {
+    test {
+        jvmArgs("-javaagent:${mockitoAgent.asPath}")
+        useJUnitPlatform()
+    }
 }
 
 tasks.withType<GenerateJavaTask> {

@@ -9,8 +9,6 @@ class UnloadedFilteredPage<ITEM, FILTER, SORT_BY>(
     val filters: FILTER?,
     val sortBy: SORT_BY?,
     private val dataLoader: suspend (page: UnloadedFilteredPage<ITEM, FILTER, SORT_BY>) -> Page<ITEM>,
-    // todo later
-//    val loginUser: LoginUser,
 ) {
     suspend fun getData(): Page<ITEM> = dataLoader.invoke(this)
 

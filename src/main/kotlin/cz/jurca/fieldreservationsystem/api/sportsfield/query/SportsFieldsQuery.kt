@@ -31,7 +31,6 @@ class SportsFieldsQuery(private val sportsFieldDbAdapter: SportsFieldDbAdapter) 
                     sportTypes = filters?.sportTypes?.map { cz.jurca.fieldreservationsystem.domain.SportType.fromApi(it) },
                 ),
             dataLoader = sportsFieldDbAdapter::filterSportsFields,
-            // loginUser = userProvider.getLoginUser().getOrThrow(),
             sortBy =
                 sortBy?.let { sportsFieldSortByInput ->
                     UnloadedFilteredPage.SportsFieldSortBy(
