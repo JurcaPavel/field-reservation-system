@@ -3,6 +3,8 @@ package cz.jurca.fieldreservationsystem.secret
 interface SecretProvider {
     fun getDatabaseCredentials(): DatabaseCredentials
 
+    fun getRedisCredentials(): RedisCredentials
+
     class Secret(val value: String)
 
     class DatabaseCredentials(
@@ -11,5 +13,10 @@ interface SecretProvider {
         val database: Secret,
         val username: Secret,
         val password: Secret,
+    )
+
+    class RedisCredentials(
+        val host: Secret,
+        val port: Secret,
     )
 }

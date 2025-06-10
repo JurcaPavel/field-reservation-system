@@ -2,6 +2,13 @@ spring:
   application:
     name:
       field-reservation-system
+# prevent creating redisConnectionFactory twice and failing startup
+  autoconfigure:
+    exclude: org.springframework.boot.autoconfigure.data.redis.RedisAutoConfiguration, org.springframework.boot.autoconfigure.data.redis.RedisRepositoriesAutoConfiguration
+  data:
+    redis:
+      repositories:
+        enabled: false
   r2dbc.pool:
     enabled: true
     initial-size: 10

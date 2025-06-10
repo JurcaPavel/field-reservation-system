@@ -9,4 +9,8 @@ class DaprSecretProvider : SecretProvider {
     override fun getDatabaseCredentials(): SecretProvider.DatabaseCredentials {
         TODO("Not yet implemented")
     }
+
+    override fun getRedisCredentials(): SecretProvider.RedisCredentials {
+        TODO("Not yet implemented")
+    }
 }

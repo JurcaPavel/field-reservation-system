@@ -17,16 +17,17 @@ class EditSportsFieldMutationIntegrationTest : BaseIntegrationTest() {
         runBlocking {
             Given()
             val sportsFieldDao = dataBuilder.buildSportsField()
-            val editInput = EditSportsFieldInput(
-                name = "Updated Sports Field",
-                coordinates = CoordinatesInput(latitude = 48.1486, longitude = 17.1077),
-                city = "New York",
-                street = "5th Avenue",
-                zipCode = "10001",
-                countryCode = "USA",
-                sportTypes = listOf(SportType.SOCCER, SportType.BASKETBALL),
-                description = "Updated sports field for testing.",
-            )
+            val editInput =
+                EditSportsFieldInput(
+                    name = "Updated Sports Field",
+                    coordinates = CoordinatesInput(latitude = 48.1486, longitude = 17.1077),
+                    city = "New York",
+                    street = "5th Avenue",
+                    zipCode = "10001",
+                    countryCode = "USA",
+                    sportTypes = listOf(SportType.SOCCER, SportType.BASKETBALL),
+                    description = "Updated sports field for testing.",
+                )
             setUserInTestSecurityContextHolder(dataBuilder.defaultManager)
 
             When()
@@ -58,16 +59,17 @@ class EditSportsFieldMutationIntegrationTest : BaseIntegrationTest() {
         runBlocking {
             Given()
             val sportsFieldDao = dataBuilder.buildSportsField()
-            val editInput = EditSportsFieldInput(
-                name = "Updated Sports Field",
-                coordinates = CoordinatesInput(latitude = 48.1486, longitude = 17.1077),
-                city = "New York",
-                street = "5th Avenue",
-                zipCode = "10001",
-                countryCode = "USA",
-                sportTypes = listOf(SportType.SOCCER, SportType.BASKETBALL),
-                description = "Updated sports field for testing.",
-            )
+            val editInput =
+                EditSportsFieldInput(
+                    name = "Updated Sports Field",
+                    coordinates = CoordinatesInput(latitude = 48.1486, longitude = 17.1077),
+                    city = "New York",
+                    street = "5th Avenue",
+                    zipCode = "10001",
+                    countryCode = "USA",
+                    sportTypes = listOf(SportType.SOCCER, SportType.BASKETBALL),
+                    description = "Updated sports field for testing.",
+                )
             setUserInTestSecurityContextHolder(dataBuilder.defaultAdmin)
 
             When()
@@ -99,16 +101,17 @@ class EditSportsFieldMutationIntegrationTest : BaseIntegrationTest() {
         runBlocking {
             Given()
             val sportsFieldDao = dataBuilder.buildSportsField()
-            val editInput = EditSportsFieldInput(
-                name = "Updated Sports Field",
-                coordinates = CoordinatesInput(latitude = 48.1486, longitude = 17.1077),
-                city = "New York",
-                street = "5th Avenue",
-                zipCode = "10001",
-                countryCode = "USA",
-                sportTypes = listOf(SportType.SOCCER, SportType.BASKETBALL),
-                description = "Updated sports field for testing.",
-            )
+            val editInput =
+                EditSportsFieldInput(
+                    name = "Updated Sports Field",
+                    coordinates = CoordinatesInput(latitude = 48.1486, longitude = 17.1077),
+                    city = "New York",
+                    street = "5th Avenue",
+                    zipCode = "10001",
+                    countryCode = "USA",
+                    sportTypes = listOf(SportType.SOCCER, SportType.BASKETBALL),
+                    description = "Updated sports field for testing.",
+                )
             val managerDao = dataBuilder.buildUser(username = "pjm2", email = "pjm2@email.com", role = "MANAGER")
             setUserInTestSecurityContextHolder(managerDao)
 

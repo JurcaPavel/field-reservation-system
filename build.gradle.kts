@@ -35,6 +35,7 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-data-r2dbc")
     implementation("org.springframework.boot:spring-boot-starter-security")
     implementation("org.springframework.boot:spring-boot-starter-webflux")
+    implementation("org.springframework.boot:spring-boot-starter-data-redis-reactive")
     implementation("io.arrow-kt:arrow-core:$arrowKtVersion")
     implementation("io.arrow-kt:arrow-fx-coroutines:$arrowKtVersion")
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin")

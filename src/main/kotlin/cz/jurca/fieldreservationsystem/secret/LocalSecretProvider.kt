@@ -1,6 +1,7 @@
 package cz.jurca.fieldreservationsystem.secret
 
 import cz.jurca.fieldreservationsystem.secret.SecretProvider.DatabaseCredentials
+import cz.jurca.fieldreservationsystem.secret.SecretProvider.RedisCredentials
 import cz.jurca.fieldreservationsystem.secret.SecretProvider.Secret
 import org.springframework.context.annotation.Primary
 import org.springframework.context.annotation.Profile
@@ -17,5 +18,11 @@ class LocalSecretProvider : SecretProvider {
             database = Secret(System.getenv("DB_NAME") ?: "field_reservation"),
             username = Secret(System.getenv("DB_USER") ?: "field_reservation_db_user"),
             password = Secret(System.getenv("DB_PASSWORD") ?: "field_reservation_db_password"),
+        )
+
+    override fun getRedisCredentials(): RedisCredentials =
+        RedisCredentials(
+            host = Secret(System.getenv("REDIS_HOST") ?: "localhost"),
+            port = Secret(System.getenv("REDIS_PORT") ?: "6379"),
         )
 }
