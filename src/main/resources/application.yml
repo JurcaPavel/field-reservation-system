@@ -13,6 +13,9 @@ spring:
     enabled: true
     initial-size: 10
     max-size: 50
+  threads:
+    virtual:
+      enabled: true
 
 dgs:
   graphql:
@@ -20,6 +23,8 @@ dgs:
     graphiql:
       enabled: true
       path: "/graphiql"
+    virtualthreads:
+      enabled: true
 
 server:
   port: 8081
