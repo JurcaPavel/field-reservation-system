@@ -1,6 +1,8 @@
 package cz.jurca.fieldreservationsystem.domain
 
 import cz.jurca.fieldreservationsystem.configuration.SecurityConfiguration
+import cz.jurca.fieldreservationsystem.repository.adapter.SportsFieldDbAdapter
+import cz.jurca.fieldreservationsystem.repository.adapter.UserDbAdapter
 import kotlinx.coroutines.reactor.awaitSingleOrNull
 import org.springframework.security.authentication.AuthenticationCredentialsNotFoundException
 import org.springframework.security.core.Authentication
@@ -12,7 +14,7 @@ interface ProvidesLoginUser {
 }
 
 @Component
-class UserProvider : ProvidesLoginUser {
+class UserProvider(private val sportsFieldDbAdapter: SportsFieldDbAdapter, private val userDbAdapter: UserDbAdapter) : ProvidesLoginUser {
     override suspend fun getLoginUser(): Result<LoginUser> {
         val auth: Authentication =
             ReactiveSecurityContextHolder.getContext().awaitSingleOrNull()?.authentication
@@ -20,9 +22,10 @@ class UserProvider : ProvidesLoginUser {
         val springUser = auth.principal as SecurityConfiguration.CustomUserDetails
         val loginUser =
             LoginUser(
-                springUser.getId(),
+                requireNotNull(UnvalidatedUserId(springUser.getId()).validate(userDbAdapter::findUser).getOrNull()) { "This should never happen as user is already authenticated. " },
                 Username(springUser.username),
                 UserRole.fromSpringRole(springUser.authorities.first().authority),
+                sportsFieldDbAdapter::isSportsFieldOwner,
             )
         return Result.success(loginUser)
     }

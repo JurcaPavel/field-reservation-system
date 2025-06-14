@@ -62,7 +62,7 @@ class NewSportsFieldTest : BaseTest() {
                 ),
             description = Description("Test description"),
             sportTypes = listOf(SportType.SOCCER),
-            loginUser = LoginUser(1, Username("username"), userRole),
+            loginUser = LoginUser(mock(), Username("username"), userRole, mock()),
             createSportsFieldProvider = mock(),
         )
 }

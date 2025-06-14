@@ -12,6 +12,7 @@ import cz.jurca.fieldreservationsystem.domain.SportType
 import cz.jurca.fieldreservationsystem.domain.SportsField
 import cz.jurca.fieldreservationsystem.domain.SportsFieldId
 import cz.jurca.fieldreservationsystem.domain.Street
+import cz.jurca.fieldreservationsystem.domain.UnvalidatedSportsFieldId
 import cz.jurca.fieldreservationsystem.domain.User
 import cz.jurca.fieldreservationsystem.domain.UserId
 import cz.jurca.fieldreservationsystem.domain.ZipCode
@@ -40,13 +41,13 @@ data class SportsFieldDao(
 
     fun getDaoId(): Int = id!!
 
-    fun toDomain(
-        detailProvider: suspend (SportsFieldId) -> SportsField,
+    suspend fun toDomain(
+        idProvider: suspend (UnvalidatedSportsFieldId) -> SportsFieldId?,
         userDetailProvider: suspend (UserId) -> User,
         sportTypes: List<SportType>,
     ): SportsField {
         return SportsField(
-            id = SportsFieldId(getDaoId(), detailProvider),
+            id = requireNotNull(UnvalidatedSportsFieldId(getDaoId()).validate(idProvider).getOrNull()) { "This should never happen as the id comes from db already. " },
             name = Name(name),
             address =
                 Address(

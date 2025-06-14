@@ -1,0 +1,3 @@
+package cz.jurca.fieldreservationsystem.domain.error
+
+sealed interface SportsFieldDeletionError

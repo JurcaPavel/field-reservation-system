@@ -1,6 +1,7 @@
 package cz.jurca.fieldreservationsystem.api
 
 import cz.jurca.fieldreservationsystem.codegen.types.SportsField
+import cz.jurca.fieldreservationsystem.codegen.types.Success
 
 fun cz.jurca.fieldreservationsystem.domain.SportsField.toApi(): SportsField =
     SportsField(
@@ -14,3 +15,5 @@ fun cz.jurca.fieldreservationsystem.domain.SportsField.toApi(): SportsField =
         country = { cz.jurca.fieldreservationsystem.codegen.types.Country({ this.address.country.alphaCode3.value }, { this.address.country.countryName.value }) },
         description = { this.description?.value },
     )
+
+fun cz.jurca.fieldreservationsystem.domain.Success.toApi(message: String): Success = Success( {message} )

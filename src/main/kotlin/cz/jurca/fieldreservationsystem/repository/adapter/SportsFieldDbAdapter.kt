@@ -27,6 +27,8 @@ import cz.jurca.fieldreservationsystem.repository.SportsFieldRepository
 import cz.jurca.fieldreservationsystem.repository.SportsFieldSportTypeDao
 import cz.jurca.fieldreservationsystem.repository.SportsFieldSportTypeRepository
 import kotlinx.coroutines.reactor.awaitSingle
+import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.context.annotation.Lazy
 import org.springframework.data.domain.PageRequest
 import org.springframework.data.domain.Sort
 import org.springframework.data.r2dbc.core.R2dbcEntityTemplate
@@ -42,13 +44,17 @@ class SportsFieldDbAdapter(
     private val sportsFieldSportTypeRepository: SportsFieldSportTypeRepository,
     private val userDbAdapter: UserDbAdapter,
     private val r2dbcEntityTemplate: R2dbcEntityTemplate,
-) {
-    suspend fun findSportsField(id: UnvalidatedSportsFieldId): SportsFieldId? = sportsFieldRepository.findById(id.value)?.run { SportsFieldId(this.getDaoId(), this@SportsFieldDbAdapter::getDetail) }
+) : SportsFieldDeletable {
+    @Autowired
+    @Lazy
+    private lateinit var self: SportsFieldDeletable
+
+    suspend fun findSportsField(id: UnvalidatedSportsFieldId): SportsFieldId? = sportsFieldRepository.findById(id.value)?.run { SportsFieldId(this.getDaoId(), this@SportsFieldDbAdapter::getDetail, self::delete) }
 
     suspend fun getDetail(id: SportsFieldId): SportsField =
         requireNotNull(sportsFieldRepository.findById(id.value)).let { dao ->
             SportsField(
-                id = SportsFieldId(dao.getDaoId(), this::getDetail),
+                id = SportsFieldId(dao.getDaoId(), this::getDetail, self::delete),
                 name = Name(dao.name),
                 sportTypes = findSportTypesOfSportsField(id.value),
                 description = dao.description?.let { Description(it) },
@@ -89,7 +95,7 @@ class SportsFieldDbAdapter(
         val totalItemsCount = r2dbcEntityTemplate.count(countQuery, SportsFieldDao::class.java).awaitSingle()
 
         return Page(
-            items = results.map { dao -> dao.toDomain(this::getDetail, userDbAdapter::getDetail, findSportTypesOfSportsField(dao.getDaoId())) },
+            items = results.map { dao -> dao.toDomain(this::findSportsField, userDbAdapter::getDetail, findSportTypesOfSportsField(dao.getDaoId())) },
             totalItems = totalItemsCount.toInt(),
         )
     }
@@ -107,7 +113,7 @@ class SportsFieldDbAdapter(
                     newSportsField.address.zipCode.value,
                     newSportsField.address.country.alphaCode3.value,
                     newSportsField.description?.value,
-                    newSportsField.loginUser.id,
+                    newSportsField.loginUser.id.value,
                 ),
             )
         sportTypeRepository.findAllByNameIn(newSportsField.sportTypes.map { sportType -> sportType.name })
@@ -120,7 +126,7 @@ class SportsFieldDbAdapter(
                 )
             }
 
-        return sportsFieldDao.toDomain(this::getDetail, userDbAdapter::getDetail, newSportsField.sportTypes)
+        return sportsFieldDao.toDomain(this::findSportsField, userDbAdapter::getDetail, newSportsField.sportTypes)
     }
 
     @Transactional
@@ -135,8 +141,22 @@ class SportsFieldDbAdapter(
             sportsFieldDao.countryCode = updatedSportsField.address.country.alphaCode3.value
             sportsFieldDao.description = updatedSportsField.description?.value
             sportsFieldRepository.save(sportsFieldDao)
-            sportsFieldDao.toDomain(this::getDetail, userDbAdapter::getDetail, findSportTypesOfSportsField(sportsFieldDao.getDaoId()))
+            sportsFieldDao.toDomain(this::findSportsField, userDbAdapter::getDetail, findSportTypesOfSportsField(sportsFieldDao.getDaoId()))
         }
+
+    @Transactional
+    override suspend fun delete(sportsFieldId: SportsFieldId): Unit =
+        requireNotNull(sportsFieldRepository.findById(sportsFieldId.value)).let { sportsFieldDao ->
+            sportsFieldSportTypeRepository.deleteAllBySportsFieldId(sportsFieldDao.getDaoId())
+            sportsFieldDao
+        }.let { sportsFieldDao ->
+            sportsFieldRepository.delete(sportsFieldDao)
+        }
+
+    suspend fun isSportsFieldOwner(
+        userId: UserId,
+        sportsFieldId: SportsFieldId,
+    ): Boolean = requireNotNull(sportsFieldRepository.findById(sportsFieldId.value)).managerId == userId.value
 
     private suspend fun findSportTypesOfSportsField(sportsFieldId: Int): List<SportType> =
         sportTypeRepository.findAllBySportsFieldId(sportsFieldId).let { sportTypeDaos ->

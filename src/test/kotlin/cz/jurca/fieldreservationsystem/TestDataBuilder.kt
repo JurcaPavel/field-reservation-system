@@ -29,6 +29,7 @@ class TestDataBuilder(
         username: String = "pja",
         email: String = "admin@email.com",
         password: String = "userpassword",
+        // TODO : use UserRole enum instead of String
         role: String = "ADMIN",
     ): UserDao =
         repository.saveUser(

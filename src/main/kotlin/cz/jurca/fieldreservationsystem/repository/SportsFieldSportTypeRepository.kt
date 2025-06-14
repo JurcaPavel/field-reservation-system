@@ -6,7 +6,9 @@ import org.springframework.data.repository.kotlin.CoroutineCrudRepository
 import org.springframework.stereotype.Repository
 
 @Repository
-interface SportsFieldSportTypeRepository : CoroutineCrudRepository<SportsFieldSportTypeDao, Int>
+interface SportsFieldSportTypeRepository : CoroutineCrudRepository<SportsFieldSportTypeDao, Int> {
+    suspend fun deleteAllBySportsFieldId(sportsFieldId: Int)
+}
 
 @Table("sports_field_sport_type")
 data class SportsFieldSportTypeDao(

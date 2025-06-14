@@ -8,6 +8,7 @@ import cz.jurca.fieldreservationsystem.repository.SportsFieldSportTypeDao
 import cz.jurca.fieldreservationsystem.repository.SportsFieldSportTypeRepository
 import cz.jurca.fieldreservationsystem.repository.UserDao
 import cz.jurca.fieldreservationsystem.repository.UserRepository
+import kotlinx.coroutines.flow.toList
 import kotlinx.coroutines.runBlocking
 import org.springframework.stereotype.Repository
 
@@ -50,5 +51,15 @@ class TestRepository(
         runBlocking {
             sportTypeRepository.findByName(name)
                 ?: throw IllegalArgumentException("Sport type with name '$name' not found")
+        }
+
+    fun findAllSportFields(): List<SportsFieldDao> =
+        runBlocking {
+            sportsFieldRepository.findAll().toList()
+        }
+
+    fun findAllSportFieldSportTypes(): List<SportsFieldSportTypeDao> =
+        runBlocking {
+            sportsFieldSportTypeRepository.findAll().toList()
         }
 }

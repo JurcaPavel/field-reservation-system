@@ -16,8 +16,6 @@ import cz.jurca.fieldreservationsystem.domain.IdValidator
 import cz.jurca.fieldreservationsystem.domain.Latitude
 import cz.jurca.fieldreservationsystem.domain.Longitude
 import cz.jurca.fieldreservationsystem.domain.Name
-import cz.jurca.fieldreservationsystem.domain.NotFoundError
-import cz.jurca.fieldreservationsystem.domain.NotResourceOwnerError
 import cz.jurca.fieldreservationsystem.domain.ProvidesLoginUser
 import cz.jurca.fieldreservationsystem.domain.SportFieldNotFound
 import cz.jurca.fieldreservationsystem.domain.SportType
@@ -25,10 +23,9 @@ import cz.jurca.fieldreservationsystem.domain.SportsFieldId
 import cz.jurca.fieldreservationsystem.domain.Street
 import cz.jurca.fieldreservationsystem.domain.UpdatedSportsField
 import cz.jurca.fieldreservationsystem.domain.ZipCode
+import cz.jurca.fieldreservationsystem.domain.error.ApiNotFoundError
+import cz.jurca.fieldreservationsystem.domain.error.ApiNotResourceOwnerError
 import cz.jurca.fieldreservationsystem.repository.adapter.SportsFieldDbAdapter
-
-typealias ApiNotFoundError = cz.jurca.fieldreservationsystem.codegen.types.NotFoundError
-typealias ApiNotResourceOwnerError = cz.jurca.fieldreservationsystem.codegen.types.NotResourceOwnerError
 
 @DgsComponent
 class EditSportsFieldMutation(
@@ -57,12 +54,7 @@ class EditSportsFieldMutation(
             loginUser = userProvider.getLoginUser().getOrThrow(),
             updateSportsFieldProvider = sportsFieldDbAdapter::update,
         ).update().fold(
-            ifLeft = { error ->
-                when (error) {
-                    is NotResourceOwnerError -> ApiNotResourceOwnerError({ error.message })
-                    is NotFoundError -> ApiNotFoundError({ "Sports field with id $id not found" })
-                }
-            },
+            ifLeft = { notResourceOwnerError -> ApiNotResourceOwnerError({ notResourceOwnerError.message }) },
             ifRight = { sportsField -> cacheProvider.put(id.toString(), sportsField.toApi()) },
         )
     }

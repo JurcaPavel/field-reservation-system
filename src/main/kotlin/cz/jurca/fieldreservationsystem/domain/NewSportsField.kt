@@ -3,6 +3,7 @@ package cz.jurca.fieldreservationsystem.domain
 import arrow.core.Either
 import arrow.core.raise.either
 import arrow.core.raise.ensure
+import cz.jurca.fieldreservationsystem.domain.error.NotManagerOrAdminError
 
 class NewSportsField(
     val name: Name,

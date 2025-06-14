@@ -6,7 +6,7 @@ import cz.jurca.fieldreservationsystem.codegen.types.CoordinatesInput
 import cz.jurca.fieldreservationsystem.codegen.types.EditSportsFieldInput
 import cz.jurca.fieldreservationsystem.codegen.types.SportType
 import cz.jurca.fieldreservationsystem.codegen.types.SportsField
-import cz.jurca.fieldreservationsystem.domain.NotResourceOwnerError
+import cz.jurca.fieldreservationsystem.domain.error.NotResourceOwnerError
 import io.kotest.common.runBlocking
 import io.kotest.matchers.collections.shouldContainExactlyInAnyOrder
 import io.kotest.matchers.shouldBe
