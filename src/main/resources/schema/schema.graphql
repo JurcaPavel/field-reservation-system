@@ -4,6 +4,11 @@ schema {
 }
 
 type Query {
+  reservation(id: ID!): Reservation
+  reservations(
+    filters: ReservationFiltersInput,
+    pagination: PaginationInput!,
+  ): ReservationsWrapper!
   sportsField(id: ID!): SportsFieldResult!
   sportsFields(
     filters: SportsFieldFiltersInput,
@@ -13,6 +18,9 @@ type Query {
 }
 
 type Mutation {
+  cancelReservation(id: ID!): CancelReservationResult!
+  createReservation(input: CreateReservationInput!): CreateReservationResult!
+  editReservation(id: ID!, input: EditReservationInput!): EditReservationResult!
   createSportsField(input: CreateSportsFieldInput!): CreateSportsFieldResult!
   editSportsField(id: ID!, input: EditSportsFieldInput!): EditSportsFieldResult!
 }
@@ -86,6 +94,58 @@ type SportsFieldsWrapper {
 union CreateSportsFieldResult = SportsField | NotManagerOrAdminError
 
 union EditSportsFieldResult = SportsField | NotFoundError | NotResourceOwnerError
+
+#
+# Reservation
+#
+
+type Reservation {
+  id: ID!
+  sportsFieldId: ID!
+  startTime: String!
+  endTime: String!
+  userId: ID!
+  additionalInfo: String
+}
+
+type ReservationsWrapper {
+  reservations: [Reservation!]!
+  paginationInfo: PaginationInfo!
+}
+
+input CreateReservationInput {
+  sportsFieldId: ID!
+  startTime: String!
+  endTime: String!
+  additionalInfo: String
+}
+
+input EditReservationInput {
+  startTime: String!
+  endTime: String!
+  additionalInfo: String
+}
+
+input ReservationFiltersInput {
+  userId: ID
+  sportsFieldId: ID!
+  startTime: String!
+  endTime: String!
+}
+
+union CancelReservationResult = NotFoundError | NotResourceOwnerError | PastReservationCancellationError
+
+union CreateReservationResult = Reservation | AlreadyReservedError
+
+union EditReservationResult = Reservation | NotFoundError | NotResourceOwnerError
+
+type AlreadyReservedError {
+  message: String!
+}
+
+type PastReservationCancellationError {
+  message: String!
+}
 
 #
 # Location
