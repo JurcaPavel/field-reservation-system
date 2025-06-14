@@ -42,7 +42,7 @@ class SecurityConfiguration(
                     cors
                 }
             }.authorizeExchange { exchanges ->
-                exchanges.pathMatchers("/public/authenticate").permitAll()
+                exchanges.pathMatchers("/public/v1/authenticate").permitAll()
                 exchanges.pathMatchers("/**").authenticated()
             }.httpBasic(Customizer.withDefaults())
 

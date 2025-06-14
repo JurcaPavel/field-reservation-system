@@ -12,7 +12,7 @@ class AuthenticationIntegrationTest : BaseIntegrationTest() {
         When()
         val response =
             webTestClient.post()
-                .uri("/public/authenticate")
+                .uri("/public/v1/authenticate")
                 .bodyValue(BasicAuthInput(username = "pja", password = "userpassword"))
                 .exchange()
                 .expectStatus().isOk
@@ -29,7 +29,7 @@ class AuthenticationIntegrationTest : BaseIntegrationTest() {
         When()
         val response =
             webTestClient.post()
-                .uri("/public/authenticate")
+                .uri("/public/v1/authenticate")
                 .bodyValue(BasicAuthInput(username = "random", password = "randompassword"))
                 .exchange()
                 .expectStatus().isUnauthorized

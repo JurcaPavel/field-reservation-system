@@ -6,10 +6,10 @@ import org.springframework.context.annotation.Configuration
 import org.springframework.web.reactive.function.server.coRouter
 
 @Configuration
-class RouterConfiguration {
+class RestRouter {
     @Bean
     fun mainRouter(userHandler: UserHandler) =
         coRouter {
-            POST("/public/authenticate", userHandler::authenticate)
+            POST("/public/v1/authenticate", userHandler::authenticate)
         }
 }

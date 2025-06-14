@@ -117,6 +117,7 @@ Once the application is running, you can access it at:
 - GraphQL API endpoint: http://localhost:8081/public/graphql
 - GraphiQL (GraphQL IDE): http://localhost:8081/graphiql
 - Management endpoints: http://localhost:8081/management/
+- Swagger UI: http://localhost:8081/swagger-ui/index.html
 
 ## Development
 
@@ -145,6 +146,11 @@ Database migrations are managed with Flyway and can be found in `src/main/resour
 ### GraphQL API
 
 The GraphQL schema is defined in `src/main/resources/schema/schema.graphql`.
+
+### REST API
+
+The REST API documentation is available at `/swagger-ui/index.html`.
+Documentation customization is done in OpenApiConfiguration class.
 
 ## Deployment
 

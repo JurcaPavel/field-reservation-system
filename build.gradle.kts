@@ -29,6 +29,7 @@ private val kotestExtensionsSpring = "1.3.0"
 private val kotestAssertionsArrow = "2.0.0"
 private val oshaiKotlinLogging = "7.0.7"
 private val arrowKtVersion = "2.1.2"
+private val springdocVersion = "2.8.9"
 
 dependencies {
     implementation("org.springframework.boot:spring-boot-starter-actuator")
@@ -49,6 +50,7 @@ dependencies {
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-reactor")
     implementation("org.springframework:spring-jdbc")
     implementation("org.postgresql:r2dbc-postgresql")
+    implementation("org.springdoc:springdoc-openapi-starter-webflux-ui:$springdocVersion")
     runtimeOnly("org.postgresql:postgresql")
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     testImplementation("org.springframework.boot:spring-boot-testcontainers")
