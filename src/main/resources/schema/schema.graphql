@@ -94,7 +94,7 @@ type SportsFieldsWrapper {
 
 union CreateSportsFieldResult = SportsField | NotManagerOrAdminError
 
-union DeleteSportsFieldResult = NotFoundError | NotResourceOwnerError | NotManagerOrAdminError
+union DeleteSportsFieldResult = Success | NotFoundError | NotResourceOwnerError | NotManagerOrAdminError
 
 union EditSportsFieldResult = SportsField | NotFoundError | NotResourceOwnerError
 
@@ -136,7 +136,7 @@ input ReservationFiltersInput {
   endTime: String!
 }
 
-union CancelReservationResult = NotFoundError | NotResourceOwnerError | PastReservationCancellationError
+union CancelReservationResult = Success | NotFoundError | NotResourceOwnerError | PastReservationCancellationError
 
 union CreateReservationResult = Reservation | AlreadyReservedError
 
@@ -182,6 +182,10 @@ input PaginationInput {
 
 type PaginationInfo {
   itemsTotalCount: Int!
+}
+
+type Success {
+  message: String!
 }
 
 enum SortByDirection {
