@@ -5,6 +5,7 @@ import com.netflix.graphql.dgs.DgsMutation
 import com.netflix.graphql.dgs.InputArgument
 import cz.jurca.fieldreservationsystem.api.toApi
 import cz.jurca.fieldreservationsystem.cache.CacheProvider
+import cz.jurca.fieldreservationsystem.cache.SPORTS_FIELD_KEY
 import cz.jurca.fieldreservationsystem.codegen.types.CreateSportsFieldInput
 import cz.jurca.fieldreservationsystem.codegen.types.CreateSportsFieldResult
 import cz.jurca.fieldreservationsystem.codegen.types.NotManagerOrAdminError
@@ -43,6 +44,6 @@ class CreateSportsFieldMutation(
             createSportsFieldProvider = sportsFieldDbAdapter::create,
         ).create().fold(
             ifLeft = { error -> NotManagerOrAdminError({ error.message }) },
-            ifRight = { sportsField -> cacheProvider.put(sportsField.id.value.toString(), sportsField.toApi()) },
+            ifRight = { sportsField -> cacheProvider.put(SPORTS_FIELD_KEY + sportsField.id.value.toString(), sportsField.toApi()) },
         )
 }

@@ -5,6 +5,7 @@ import com.netflix.graphql.dgs.DgsMutation
 import com.netflix.graphql.dgs.InputArgument
 import cz.jurca.fieldreservationsystem.api.toApi
 import cz.jurca.fieldreservationsystem.cache.CacheProvider
+import cz.jurca.fieldreservationsystem.cache.SPORTS_FIELD_KEY
 import cz.jurca.fieldreservationsystem.codegen.types.EditSportsFieldInput
 import cz.jurca.fieldreservationsystem.codegen.types.EditSportsFieldResult
 import cz.jurca.fieldreservationsystem.domain.Address
@@ -55,7 +56,7 @@ class EditSportsFieldMutation(
             updateSportsFieldProvider = sportsFieldDbAdapter::update,
         ).update().fold(
             ifLeft = { notResourceOwnerError -> ApiNotResourceOwnerError({ notResourceOwnerError.message }) },
-            ifRight = { sportsField -> cacheProvider.put(id.toString(), sportsField.toApi()) },
+            ifRight = { sportsField -> cacheProvider.put(SPORTS_FIELD_KEY + id.toString(), sportsField.toApi()) },
         )
     }
 }

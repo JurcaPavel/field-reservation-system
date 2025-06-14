@@ -19,3 +19,5 @@ interface CacheProvider {
         key: String,
     ): Boolean
 }
+
+const val SPORTS_FIELD_KEY = "sportsField-"

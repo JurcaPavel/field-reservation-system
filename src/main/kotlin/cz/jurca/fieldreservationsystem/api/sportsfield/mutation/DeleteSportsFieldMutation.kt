@@ -5,6 +5,7 @@ import com.netflix.graphql.dgs.DgsMutation
 import com.netflix.graphql.dgs.InputArgument
 import cz.jurca.fieldreservationsystem.api.toApi
 import cz.jurca.fieldreservationsystem.cache.CacheProvider
+import cz.jurca.fieldreservationsystem.cache.SPORTS_FIELD_KEY
 import cz.jurca.fieldreservationsystem.codegen.types.DeleteSportsFieldResult
 import cz.jurca.fieldreservationsystem.domain.IdValidator
 import cz.jurca.fieldreservationsystem.domain.ProvidesLoginUser
@@ -34,7 +35,7 @@ class DeleteSportsFieldMutation(private val userProvider: ProvidesLoginUser, pri
                         }
                     },
                     ifRight = { success ->
-                        cacheProvider.evict(id.toString())
+                        cacheProvider.evict(SPORTS_FIELD_KEY + id.toString())
                         success.toApi("Sports field deleted successfully by ${loginUser.username.value}") },
                 )
             }
