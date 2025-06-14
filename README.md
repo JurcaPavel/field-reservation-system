@@ -146,6 +146,7 @@ Database migrations are managed with Flyway and can be found in `src/main/resour
 ### GraphQL API
 
 The GraphQL schema is defined in `src/main/resources/schema/schema.graphql`.
+The GraphiQL IDE is available at http://{host}:{port}/graphiql
 
 ### REST API
 
