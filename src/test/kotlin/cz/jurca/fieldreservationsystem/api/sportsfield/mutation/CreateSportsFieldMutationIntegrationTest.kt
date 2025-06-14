@@ -7,6 +7,7 @@ import cz.jurca.fieldreservationsystem.codegen.types.CreateSportsFieldInput
 import cz.jurca.fieldreservationsystem.codegen.types.NotManagerOrAdminError
 import cz.jurca.fieldreservationsystem.codegen.types.SportType
 import cz.jurca.fieldreservationsystem.codegen.types.SportsField
+import cz.jurca.fieldreservationsystem.domain.UserRole
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.shouldNotBe
 import kotlinx.coroutines.runBlocking
@@ -57,7 +58,7 @@ class CreateSportsFieldMutationIntegrationTest : BaseIntegrationTest() {
     fun `given user not manager or admin when create sports field then return NotManagerOrAdminError`() =
         runBlocking {
             Given()
-            val basicUserDao = dataBuilder.buildUser(username = "pjb", email = "basic@email.com", role = "BASIC")
+            val basicUserDao = dataBuilder.buildUser(username = "pjb", email = "basic@email.com", role = UserRole.BASIC)
             setUserInTestSecurityContextHolder(basicUserDao)
             val input =
                 CreateSportsFieldInput(

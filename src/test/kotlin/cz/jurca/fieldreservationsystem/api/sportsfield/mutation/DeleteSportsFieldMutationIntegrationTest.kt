@@ -3,6 +3,7 @@ package cz.jurca.fieldreservationsystem.api.sportsfield.mutation
 import cz.jurca.fieldreservationsystem.BaseIntegrationTest
 import cz.jurca.fieldreservationsystem.codegen.DgsClient
 import cz.jurca.fieldreservationsystem.codegen.types.Success
+import cz.jurca.fieldreservationsystem.domain.UserRole
 import cz.jurca.fieldreservationsystem.domain.error.NotManagerOrAdminError
 import cz.jurca.fieldreservationsystem.domain.error.NotResourceOwnerError
 import io.kotest.common.runBlocking
@@ -60,7 +61,7 @@ class DeleteSportsFieldMutationIntegrationTest : BaseIntegrationTest() {
         runBlocking {
             Given()
             val sportsFieldDao = dataBuilder.buildSportsField()
-            val notOwnerManagerDao = dataBuilder.buildUser(username = "pjm2", email = "pjm2@email.com", role = "MANAGER")
+            val notOwnerManagerDao = dataBuilder.buildUser(username = "pjm2", email = "pjm2@email.com", role = UserRole.MANAGER)
             setUserInTestSecurityContextHolder(notOwnerManagerDao)
 
             When()
@@ -84,7 +85,7 @@ class DeleteSportsFieldMutationIntegrationTest : BaseIntegrationTest() {
         runBlocking {
             Given()
             val sportsFieldDao = dataBuilder.buildSportsField()
-            val basicUser = dataBuilder.buildUser(username = "pj", email = "pj@email.com", role = "BASIC")
+            val basicUser = dataBuilder.buildUser(username = "pj", email = "pj@email.com", role = UserRole.BASIC)
             setUserInTestSecurityContextHolder(basicUser)
 
             When()

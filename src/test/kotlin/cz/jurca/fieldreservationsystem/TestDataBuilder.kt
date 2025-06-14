@@ -1,6 +1,7 @@
 package cz.jurca.fieldreservationsystem
 
 import cz.jurca.fieldreservationsystem.domain.SportType
+import cz.jurca.fieldreservationsystem.domain.UserRole
 import cz.jurca.fieldreservationsystem.repository.SportTypeDao
 import cz.jurca.fieldreservationsystem.repository.SportsFieldDao
 import cz.jurca.fieldreservationsystem.repository.SportsFieldSportTypeDao
@@ -21,7 +22,7 @@ class TestDataBuilder(
     fun buildInitialData() {
         buildDefaultSportTypes()
         defaultAdmin = buildUser()
-        defaultManager = buildUser(username = "pjm", email = "manager@email.com", role = "MANAGER")
+        defaultManager = buildUser(username = "pjm", email = "manager@email.com", role = UserRole.MANAGER)
     }
 
     fun buildUser(
@@ -29,8 +30,7 @@ class TestDataBuilder(
         username: String = "pja",
         email: String = "admin@email.com",
         password: String = "userpassword",
-        // TODO : use UserRole enum instead of String
-        role: String = "ADMIN",
+        role: UserRole = UserRole.ADMIN,
     ): UserDao =
         repository.saveUser(
             UserDao(
@@ -38,7 +38,7 @@ class TestDataBuilder(
                 username = username,
                 email = email,
                 password = passwordEncoder.encode(password),
-                role = role,
+                role = role.name,
             ),
         )
 

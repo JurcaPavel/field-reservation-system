@@ -6,6 +6,7 @@ import cz.jurca.fieldreservationsystem.codegen.types.CoordinatesInput
 import cz.jurca.fieldreservationsystem.codegen.types.EditSportsFieldInput
 import cz.jurca.fieldreservationsystem.codegen.types.SportType
 import cz.jurca.fieldreservationsystem.codegen.types.SportsField
+import cz.jurca.fieldreservationsystem.domain.UserRole
 import cz.jurca.fieldreservationsystem.domain.error.NotResourceOwnerError
 import io.kotest.common.runBlocking
 import io.kotest.matchers.collections.shouldContainExactlyInAnyOrder
@@ -112,7 +113,7 @@ class EditSportsFieldMutationIntegrationTest : BaseIntegrationTest() {
                     sportTypes = listOf(SportType.SOCCER, SportType.BASKETBALL),
                     description = "Updated sports field for testing.",
                 )
-            val managerDao = dataBuilder.buildUser(username = "pjm2", email = "pjm2@email.com", role = "MANAGER")
+            val managerDao = dataBuilder.buildUser(username = "pjm2", email = "pjm2@email.com", role = UserRole.MANAGER)
             setUserInTestSecurityContextHolder(managerDao)
 
             When()
