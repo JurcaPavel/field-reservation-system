@@ -12,11 +12,12 @@ import org.springframework.security.test.context.TestSecurityContextHolder
 import org.springframework.test.context.ActiveProfiles
 import org.springframework.test.context.DynamicPropertyRegistry
 import org.springframework.test.context.DynamicPropertySource
+import org.springframework.test.web.reactive.server.WebTestClient
 import org.testcontainers.containers.PostgreSQLContainer
 import org.testcontainers.utility.DockerImageName
 
 @ActiveProfiles("test")
-@SpringBootTest(classes = [FieldReservationSystemApplication::class])
+@SpringBootTest(classes = [FieldReservationSystemApplication::class], webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @EnableDgsTest
 abstract class BaseIntegrationTest : BaseTest() {
     // reuse the PostgreSQL container across tests to speed up the test execution
@@ -48,6 +49,9 @@ abstract class BaseIntegrationTest : BaseTest() {
 
     @Autowired
     protected lateinit var dgsQueryExecutor: DgsQueryExecutor
+
+    @Autowired
+    protected lateinit var webTestClient: WebTestClient
 
     @Autowired
     protected lateinit var dataBuilder: TestDataBuilder

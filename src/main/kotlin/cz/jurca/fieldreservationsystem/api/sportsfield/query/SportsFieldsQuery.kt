@@ -2,6 +2,7 @@ package cz.jurca.fieldreservationsystem.api.sportsfield.query
 
 import com.netflix.graphql.dgs.DgsComponent
 import com.netflix.graphql.dgs.DgsQuery
+import com.netflix.graphql.dgs.InputArgument
 import cz.jurca.fieldreservationsystem.api.toApi
 import cz.jurca.fieldreservationsystem.codegen.types.PaginationInfo
 import cz.jurca.fieldreservationsystem.codegen.types.PaginationInput
@@ -17,9 +18,9 @@ import cz.jurca.fieldreservationsystem.repository.adapter.SportsFieldDbAdapter
 class SportsFieldsQuery(private val sportsFieldDbAdapter: SportsFieldDbAdapter) {
     @DgsQuery
     suspend fun sportsFields(
-        filters: SportsFieldFiltersInput?,
-        sortBy: SportsFieldSortByInput?,
-        pagination: PaginationInput,
+        @InputArgument filters: SportsFieldFiltersInput?,
+        @InputArgument sortBy: SportsFieldSortByInput?,
+        @InputArgument pagination: PaginationInput,
     ): SportsFieldsWrapper =
         UnloadedFilteredPage(
             pageNumber = pagination.pageNumber,

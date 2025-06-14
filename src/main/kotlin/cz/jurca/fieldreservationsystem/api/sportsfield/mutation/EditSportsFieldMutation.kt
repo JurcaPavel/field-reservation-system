@@ -2,6 +2,7 @@ package cz.jurca.fieldreservationsystem.api.sportsfield.mutation
 
 import com.netflix.graphql.dgs.DgsComponent
 import com.netflix.graphql.dgs.DgsMutation
+import com.netflix.graphql.dgs.InputArgument
 import cz.jurca.fieldreservationsystem.api.toApi
 import cz.jurca.fieldreservationsystem.cache.CacheProvider
 import cz.jurca.fieldreservationsystem.codegen.types.EditSportsFieldInput
@@ -38,8 +39,8 @@ class EditSportsFieldMutation(
 ) {
     @DgsMutation
     suspend fun editSportsField(
-        id: Int,
-        input: EditSportsFieldInput,
+        @InputArgument id: Int,
+        @InputArgument input: EditSportsFieldInput,
     ): EditSportsFieldResult {
         val idResult = idValidator.existsSportsField(id)
         if (idResult is SportFieldNotFound) {

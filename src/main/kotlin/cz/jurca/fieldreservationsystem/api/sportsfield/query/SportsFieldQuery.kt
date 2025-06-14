@@ -2,6 +2,7 @@ package cz.jurca.fieldreservationsystem.api.sportsfield.query
 
 import com.netflix.graphql.dgs.DgsComponent
 import com.netflix.graphql.dgs.DgsQuery
+import com.netflix.graphql.dgs.InputArgument
 import cz.jurca.fieldreservationsystem.api.toApi
 import cz.jurca.fieldreservationsystem.cache.CacheProvider
 import cz.jurca.fieldreservationsystem.codegen.types.NotFoundError
@@ -14,7 +15,9 @@ import cz.jurca.fieldreservationsystem.domain.SportsFieldId
 @DgsComponent
 class SportsFieldQuery(private val validator: IdValidator, private val cacheProvider: CacheProvider) {
     @DgsQuery
-    suspend fun sportsField(id: Int): SportsFieldResult =
+    suspend fun sportsField(
+        @InputArgument id: Int,
+    ): SportsFieldResult =
         // TODO think of a nicer way to cache
         cacheProvider.get(id.toString(), SportsField::class.java)
             ?: when (val idResult = validator.existsSportsField(id)) {

@@ -2,6 +2,7 @@ package cz.jurca.fieldreservationsystem.api.sportsfield.mutation
 
 import com.netflix.graphql.dgs.DgsComponent
 import com.netflix.graphql.dgs.DgsMutation
+import com.netflix.graphql.dgs.InputArgument
 import cz.jurca.fieldreservationsystem.api.toApi
 import cz.jurca.fieldreservationsystem.cache.CacheProvider
 import cz.jurca.fieldreservationsystem.codegen.types.CreateSportsFieldInput
@@ -29,7 +30,9 @@ class CreateSportsFieldMutation(
     private val cacheProvider: CacheProvider,
 ) {
     @DgsMutation
-    suspend fun createSportsField(input: CreateSportsFieldInput): CreateSportsFieldResult =
+    suspend fun createSportsField(
+        @InputArgument input: CreateSportsFieldInput,
+    ): CreateSportsFieldResult =
         NewSportsField(
             name = Name(input.name),
             coordinates = Coordinates(Latitude(input.coordinates.latitude), Longitude(input.coordinates.longitude)),

@@ -15,15 +15,21 @@ class BasicAuthentication(
             passwordMatchesProvider(rawPassword.value, userDetails.password)
         }.let { isValidUser ->
             if (isValidUser == true) {
-                AuthResult.Success(username)
+                AuthResult.Success(username, AuthResult.AuthStatus("Valid credentials"))
             } else {
-                AuthResult.Failure("Invalid credentials")
+                AuthResult.Failure(AuthResult.AuthFailureReason("Invalid credentials"))
             }
         }
 }
 
 sealed class AuthResult {
-    data class Success(val username: Username) : AuthResult()
+    data class Success(val username: Username, val status: AuthStatus) : AuthResult()
 
-    data class Failure(val reason: String) : AuthResult()
+    data class Failure(val reason: AuthFailureReason) : AuthResult()
+
+    @JvmInline
+    value class AuthStatus(val value: String)
+
+    @JvmInline
+    value class AuthFailureReason(val value: String)
 }

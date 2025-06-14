@@ -122,6 +122,9 @@ Once the application is running, you can access it at:
 
 ### Running Tests
 
+To be able to run integration tests, you need to have Docker running - for example Docker Desktop.
+To run the tests, use the following command:
+
 ```
 ./gradlew test
 ```
