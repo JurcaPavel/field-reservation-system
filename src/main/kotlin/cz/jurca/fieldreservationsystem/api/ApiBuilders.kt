@@ -1,7 +1,12 @@
 package cz.jurca.fieldreservationsystem.api
 
+import cz.jurca.fieldreservationsystem.codegen.types.SportType
 import cz.jurca.fieldreservationsystem.codegen.types.SportsField
 import cz.jurca.fieldreservationsystem.codegen.types.Success
+import cz.jurca.fieldreservationsystem.domain.SportType.BASKETBALL
+import cz.jurca.fieldreservationsystem.domain.SportType.BEACH_VOLLEYBALL
+import cz.jurca.fieldreservationsystem.domain.SportType.SOCCER
+import cz.jurca.fieldreservationsystem.domain.SportType.TENNIS
 
 fun cz.jurca.fieldreservationsystem.domain.SportsField.toApi(): SportsField =
     SportsField(
@@ -17,3 +22,12 @@ fun cz.jurca.fieldreservationsystem.domain.SportsField.toApi(): SportsField =
     )
 
 fun cz.jurca.fieldreservationsystem.domain.Success.toApi(message: String): Success = Success( {message} )
+
+fun cz.jurca.fieldreservationsystem.domain.SportType.toApi(): SportType {
+    return when (this) {
+        BASKETBALL -> cz.jurca.fieldreservationsystem.codegen.types.SportType.BASKETBALL
+        BEACH_VOLLEYBALL -> cz.jurca.fieldreservationsystem.codegen.types.SportType.BEACH_VOLLEYBALL
+        SOCCER -> cz.jurca.fieldreservationsystem.codegen.types.SportType.SOCCER
+        TENNIS -> cz.jurca.fieldreservationsystem.codegen.types.SportType.TENNIS
+    }
+}
