@@ -22,6 +22,7 @@ type Mutation {
   createReservation(input: CreateReservationInput!): CreateReservationResult!
   editReservation(id: ID!, input: EditReservationInput!): EditReservationResult!
   createSportsField(input: CreateSportsFieldInput!): CreateSportsFieldResult!
+  deleteSportsField(id: ID!): DeleteSportsFieldResult!
   editSportsField(id: ID!, input: EditSportsFieldInput!): EditSportsFieldResult!
 }
 
@@ -92,6 +93,8 @@ type SportsFieldsWrapper {
 }
 
 union CreateSportsFieldResult = SportsField | NotManagerOrAdminError
+
+union DeleteSportsFieldResult = NotFoundError | NotResourceOwnerError | NotManagerOrAdminError
 
 union EditSportsFieldResult = SportsField | NotFoundError | NotResourceOwnerError
 
