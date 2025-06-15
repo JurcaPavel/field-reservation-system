@@ -169,6 +169,7 @@ input AvailabilityFilterInput {
 type TimeSlotAvailability {
   timeSlot: TimeSlot!
   isAvailable: Boolean!
+  reservationId: ID
 }
 
 enum AvailabilityPeriod {
