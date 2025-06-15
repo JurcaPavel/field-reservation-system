@@ -4,6 +4,10 @@ schema {
 }
 
 type Query {
+  sportsFieldAvailability(
+    id: ID!,
+    availabilityInput: AvailabilityFilterInput
+  ): SportsFieldAvailability
   reservation(id: ID!): Reservation
   reservations(
     filters: ReservationFiltersInput,
@@ -104,11 +108,11 @@ union EditSportsFieldResult = SportsField | NotFoundError | NotResourceOwnerErro
 
 type Reservation {
   id: ID!
-  sportsFieldId: ID!
-  startTime: String!
-  endTime: String!
   userId: ID!
-  additionalInfo: String
+  sportsFieldId: ID!
+  timeslot: TimeSlot!
+  userNote: String
+  ownerNote: String
 }
 
 type ReservationsWrapper {
@@ -118,22 +122,18 @@ type ReservationsWrapper {
 
 input CreateReservationInput {
   sportsFieldId: ID!
-  startTime: String!
-  endTime: String!
+  timeslot: TimeSlotInput!
   additionalInfo: String
 }
 
 input EditReservationInput {
-  startTime: String!
-  endTime: String!
+  timeslot: TimeSlotInput!
   additionalInfo: String
 }
 
 input ReservationFiltersInput {
   userId: ID
-  sportsFieldId: ID!
-  startTime: String!
-  endTime: String!
+  sportsFieldIds: [ID!]
 }
 
 union CancelReservationResult = Success | NotFoundError | NotResourceOwnerError | PastReservationCancellationError
@@ -148,6 +148,33 @@ type AlreadyReservedError {
 
 type PastReservationCancellationError {
   message: String!
+}
+
+#
+# Sports Field Availability
+#
+
+type SportsFieldAvailability {
+  sportsFieldId: ID!
+  startDate: String!
+  period: AvailabilityPeriod!
+  timeSlotsAvailabilities: [TimeSlotAvailability!]!
+}
+
+input AvailabilityFilterInput {
+  startDate: String!
+  period: AvailabilityPeriod!
+}
+
+type TimeSlotAvailability {
+  timeSlot: TimeSlot!
+  isAvailable: Boolean!
+}
+
+enum AvailabilityPeriod {
+  DAY
+  WEEK
+  MONTH
 }
 
 #
@@ -167,6 +194,16 @@ input CoordinatesInput {
 #
 # Common Types
 #
+
+type TimeSlot {
+  startTime: String!
+  endTime: String!
+}
+
+input TimeSlotInput {
+  startTime: String!
+  endTime: String!
+}
 
 enum SportType {
   BASKETBALL
