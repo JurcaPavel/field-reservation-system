@@ -40,13 +40,13 @@ class EditSportsFieldMutation(
         @InputArgument id: Int,
         @InputArgument input: EditSportsFieldInput,
     ): EditSportsFieldResult {
-        val idResult = idValidator.existsSportsField(id)
-        if (idResult is SportFieldNotFound) {
+        val validationResult = idValidator.existsSportsField(id)
+        if (validationResult is SportFieldNotFound) {
             return ApiNotFoundError({ "Sports field with id $id not found" })
         }
 
         return UpdatedSportsField(
-            id = idResult as SportsFieldId,
+            id = validationResult as SportsFieldId,
             name = Name(input.name),
             coordinates = Coordinates(Latitude(input.coordinates.latitude), Longitude(input.coordinates.longitude)),
             description = input.description?.let { Description(it) },

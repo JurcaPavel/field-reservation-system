@@ -21,9 +21,9 @@ class SportsFieldQuery(private val validator: IdValidator, private val cacheProv
     ): SportsFieldResult =
         // TODO think of a nicer way to cache
         cacheProvider.get(SPORTS_FIELD_KEY + id.toString(), SportsField::class.java)
-            ?: when (val idResult = validator.existsSportsField(id)) {
+            ?: when (val validationResult = validator.existsSportsField(id)) {
                 is SportsFieldId -> {
-                    cacheProvider.put(SPORTS_FIELD_KEY + id.toString(), idResult.getDetail().toApi())
+                    cacheProvider.put(SPORTS_FIELD_KEY + id.toString(), validationResult.getDetail().toApi())
                 }
 
                 is SportFieldNotFound -> NotFoundError({ "Sports field with id $id not found" })

@@ -22,9 +22,9 @@ class ReservationQuery(private val idValidator: IdValidator, private val cachePr
         @InputArgument id: Int,
     ): ReservationResult =
         cacheProvider.get(RESERVATION_KEY + id.toString(), Reservation::class.java)
-            ?: when (val idResult = idValidator.existsReservation(id)) {
+            ?: when (val validationResult = idValidator.existsReservation(id)) {
                 is ReservationId -> {
-                    idResult.getDetail(userProvider.getLoginUser().getOrThrow()).fold(
+                    validationResult.getDetail(userProvider.getLoginUser().getOrThrow()).fold(
                         ifLeft = { notResourceOwnerError -> NotResourceOwnerError(notResourceOwnerError.message).toApi() },
                         ifRight = { reservation -> cacheProvider.put(RESERVATION_KEY + id.toString(), reservation.toApi()) },
                     )
