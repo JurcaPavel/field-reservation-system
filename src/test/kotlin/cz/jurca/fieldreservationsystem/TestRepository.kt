@@ -1,5 +1,7 @@
 package cz.jurca.fieldreservationsystem
 
+import cz.jurca.fieldreservationsystem.repository.ReservationDao
+import cz.jurca.fieldreservationsystem.repository.ReservationRepository
 import cz.jurca.fieldreservationsystem.repository.SportTypeDao
 import cz.jurca.fieldreservationsystem.repository.SportTypeRepository
 import cz.jurca.fieldreservationsystem.repository.SportsFieldDao
@@ -18,9 +20,11 @@ class TestRepository(
     private val sportsFieldRepository: SportsFieldRepository,
     private val sportsFieldSportTypeRepository: SportsFieldSportTypeRepository,
     private val userRepository: UserRepository,
+    private val reservationRepository: ReservationRepository,
 ) {
     fun deleteAll() =
         runBlocking {
+            reservationRepository.deleteAll()
             sportsFieldSportTypeRepository.deleteAll()
             sportTypeRepository.deleteAll()
             sportsFieldRepository.deleteAll()
@@ -47,6 +51,11 @@ class TestRepository(
             sportsFieldSportTypeRepository.save(sportsFieldSportTypeDao)
         }
 
+    fun saveReservation(reservationDao: ReservationDao) =
+        runBlocking {
+            reservationRepository.save(reservationDao)
+        }
+
     fun findSportTypeByName(name: String): SportTypeDao =
         runBlocking {
             sportTypeRepository.findByName(name)
@@ -61,5 +70,10 @@ class TestRepository(
     fun findAllSportFieldSportTypes(): List<SportsFieldSportTypeDao> =
         runBlocking {
             sportsFieldSportTypeRepository.findAll().toList()
+        }
+
+    fun findAllReservations(): List<ReservationDao> =
+        runBlocking {
+            reservationRepository.findAll().toList()
         }
 }

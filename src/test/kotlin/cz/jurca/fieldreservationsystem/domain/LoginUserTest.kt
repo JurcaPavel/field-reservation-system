@@ -41,28 +41,28 @@ class LoginUserTest : BaseTest() {
     }
 
     @Test
-    fun `given login user is field owner when call isSportsFieldOwner then return true`() = runBlocking {
-        Given()
-        val loginUser = LoginUser(mock(), Username("username"), UserRole.ADMIN, { _, _ -> true })
+    fun `given login user is field owner when call isSportsFieldOwner then return true`() =
+        runBlocking {
+            Given()
+            val loginUser = LoginUser(mock(), Username("username"), UserRole.ADMIN, { _, _ -> true })
 
-        When()
-        val result = loginUser.isSportsFieldOwner(mock())
+            When()
+            val result = loginUser.isSportsFieldOwner(mock())
 
-        Then()
-        result shouldBe true
-    }
+            Then()
+            result shouldBe true
+        }
 
     @Test
-    fun `given login user is not field owner when call isSportsFieldOwner then return false`() = runBlocking {
-        Given()
-        val loginUser = LoginUser(mock(), Username("username"), UserRole.ADMIN, { _, _ -> false })
+    fun `given login user is not field owner when call isSportsFieldOwner then return false`() =
+        runBlocking {
+            Given()
+            val loginUser = LoginUser(mock(), Username("username"), UserRole.ADMIN, { _, _ -> false })
 
-        When()
-        val result = loginUser.isSportsFieldOwner(mock())
+            When()
+            val result = loginUser.isSportsFieldOwner(mock())
 
-        Then()
-        result shouldBe false
-    }
-
-
+            Then()
+            result shouldBe false
+        }
 }

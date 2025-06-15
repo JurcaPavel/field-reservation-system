@@ -10,5 +10,7 @@ class LoginUser(
 
     fun isManager(): Boolean = role == UserRole.MANAGER
 
+    fun isOwnerOfReservation(reservation: Reservation): Boolean = reservation.ownerId.value == id.value
+
     suspend fun isSportsFieldOwner(sportsFieldId: SportsFieldId): Boolean = isSportsFieldOwnerProvider(id, sportsFieldId)
 }

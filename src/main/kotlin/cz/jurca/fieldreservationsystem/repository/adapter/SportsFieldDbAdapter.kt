@@ -23,6 +23,7 @@ import cz.jurca.fieldreservationsystem.domain.UserId
 import cz.jurca.fieldreservationsystem.domain.ZipCode
 import cz.jurca.fieldreservationsystem.repository.SportTypeRepository
 import cz.jurca.fieldreservationsystem.repository.SportsFieldDao
+import cz.jurca.fieldreservationsystem.repository.SportsFieldDaoId
 import cz.jurca.fieldreservationsystem.repository.SportsFieldRepository
 import cz.jurca.fieldreservationsystem.repository.SportsFieldSportTypeDao
 import cz.jurca.fieldreservationsystem.repository.SportsFieldSportTypeRepository
@@ -49,14 +50,18 @@ class SportsFieldDbAdapter(
     @Lazy
     private lateinit var self: SportsFieldDeletable
 
-    suspend fun findSportsField(id: UnvalidatedSportsFieldId): SportsFieldId? = sportsFieldRepository.findById(id.value)?.run { SportsFieldId(this.getDaoId(), this@SportsFieldDbAdapter::getDetail, self::delete) }
+    internal fun getId(sportsFieldDaoId: SportsFieldDaoId): SportsFieldId = SportsFieldId(sportsFieldDaoId.value, this@SportsFieldDbAdapter::getDetail, self::delete)
+
+    suspend fun findSportsField(id: UnvalidatedSportsFieldId): SportsFieldId? =
+        sportsFieldRepository.findById(id.value)
+            ?.run { SportsFieldId(this.getDaoId().value, this@SportsFieldDbAdapter::getDetail, self::delete) }
 
     suspend fun getDetail(id: SportsFieldId): SportsField =
         requireNotNull(sportsFieldRepository.findById(id.value)).let { dao ->
             SportsField(
-                id = SportsFieldId(dao.getDaoId(), this::getDetail, self::delete),
+                id = id,
                 name = Name(dao.name),
-                sportTypes = findSportTypesOfSportsField(id.value),
+                sportTypes = findSportTypesOfSportsField(SportsFieldDaoId(id.value)),
                 description = dao.description?.let { Description(it) },
                 address = Address(City(dao.city), Street(dao.street), ZipCode(dao.zipCode), requireNotNull(Country.findByCode(Country.AlphaCode3(dao.countryCode)))),
                 coordinates = Coordinates(Latitude(dao.latitude), Longitude(dao.longitude)),
@@ -120,8 +125,8 @@ class SportsFieldDbAdapter(
             .forEach { sportTypeDao ->
                 sportsFieldSportTypeRepository.save(
                     SportsFieldSportTypeDao(
-                        sportsFieldDao.getDaoId(),
-                        sportTypeDao.getDaoId(),
+                        sportsFieldDao.getDaoId().value,
+                        sportTypeDao.getDaoId().value,
                     ),
                 )
             }
@@ -147,7 +152,7 @@ class SportsFieldDbAdapter(
     @Transactional
     override suspend fun delete(sportsFieldId: SportsFieldId): Unit =
         requireNotNull(sportsFieldRepository.findById(sportsFieldId.value)).let { sportsFieldDao ->
-            sportsFieldSportTypeRepository.deleteAllBySportsFieldId(sportsFieldDao.getDaoId())
+            sportsFieldSportTypeRepository.deleteAllBySportsFieldId(sportsFieldDao.getDaoId().value)
             sportsFieldDao
         }.let { sportsFieldDao ->
             sportsFieldRepository.delete(sportsFieldDao)
@@ -158,8 +163,8 @@ class SportsFieldDbAdapter(
         sportsFieldId: SportsFieldId,
     ): Boolean = requireNotNull(sportsFieldRepository.findById(sportsFieldId.value)).managerId == userId.value
 
-    private suspend fun findSportTypesOfSportsField(sportsFieldId: Int): List<SportType> =
-        sportTypeRepository.findAllBySportsFieldId(sportsFieldId).let { sportTypeDaos ->
+    private suspend fun findSportTypesOfSportsField(sportsFieldDaoId: SportsFieldDaoId): List<SportType> =
+        sportTypeRepository.findAllBySportsFieldId(sportsFieldDaoId.value).let { sportTypeDaos ->
             sportTypeDaos.map { sportTypeDao ->
                 sportTypeDao.toDomain()
             }

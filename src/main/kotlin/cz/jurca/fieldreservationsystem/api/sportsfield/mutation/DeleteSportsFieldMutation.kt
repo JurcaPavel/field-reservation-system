@@ -36,7 +36,8 @@ class DeleteSportsFieldMutation(private val userProvider: ProvidesLoginUser, pri
                     },
                     ifRight = { success ->
                         cacheProvider.evict(SPORTS_FIELD_KEY + id.toString())
-                        success.toApi("Sports field deleted successfully by ${loginUser.username.value}") },
+                        success.toApi("Sports field deleted successfully by ${loginUser.username.value}")
+                    },
                 )
             }
         }

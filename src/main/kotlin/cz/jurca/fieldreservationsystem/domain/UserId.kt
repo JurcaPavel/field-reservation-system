@@ -1,6 +1,9 @@
 package cz.jurca.fieldreservationsystem.domain
 
-data class UserId(val value: Int, private val detailProvider: suspend (UserId) -> User) : UserValidationResult() {
+data class UserId(
+    val value: Int,
+    private val detailProvider: suspend (UserId) -> User,
+) : UserValidationResult() {
     suspend fun getDetail(): User = detailProvider(this)
 }
 

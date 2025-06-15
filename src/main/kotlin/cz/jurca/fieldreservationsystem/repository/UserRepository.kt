@@ -28,7 +28,7 @@ class UserDao(
     @Id
     private var id: Int? = null
 
-    fun getDaoId(): Int = id!!
+    fun getDaoId(): UserDaoId = UserDaoId(id!!)
 
     fun toDomain(userId: UserId): User =
         when (role) {
@@ -59,3 +59,5 @@ class UserDao(
             else -> throw IllegalArgumentException("Unknown role: $role")
         }
 }
+
+data class UserDaoId(val value: Int)

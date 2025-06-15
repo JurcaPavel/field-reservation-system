@@ -34,14 +34,14 @@ class EditSportsFieldMutationIntegrationTest : BaseIntegrationTest() {
             When()
             val response =
                 dgsQueryExecutor.executeAndExtractJsonPathAsObject(
-                    editSportsFieldMutationRequest(sportsFieldDao.getDaoId().toString(), editInput),
+                    editSportsFieldMutationRequest(sportsFieldDao.getDaoId().value.toString(), editInput),
                     "data.editSportsField",
                     SportsField::class.java,
                 )
 
             Then()
             response.run {
-                id shouldBe sportsFieldDao.getDaoId().toString()
+                id shouldBe sportsFieldDao.getDaoId().value.toString()
                 name shouldBe "Updated Sports Field"
                 sportTypes shouldContainExactlyInAnyOrder listOf(SportType.SOCCER, SportType.BASKETBALL)
                 coordinates.latitude shouldBe 48.1486
@@ -76,14 +76,14 @@ class EditSportsFieldMutationIntegrationTest : BaseIntegrationTest() {
             When()
             val response =
                 dgsQueryExecutor.executeAndExtractJsonPathAsObject(
-                    editSportsFieldMutationRequest(sportsFieldDao.getDaoId().toString(), editInput),
+                    editSportsFieldMutationRequest(sportsFieldDao.getDaoId().value.toString(), editInput),
                     "data.editSportsField",
                     SportsField::class.java,
                 )
 
             Then()
             response.run {
-                id shouldBe sportsFieldDao.getDaoId().toString()
+                id shouldBe sportsFieldDao.getDaoId().value.toString()
                 name shouldBe "Updated Sports Field"
                 sportTypes shouldContainExactlyInAnyOrder listOf(SportType.SOCCER, SportType.BASKETBALL)
                 coordinates.latitude shouldBe 48.1486
@@ -119,14 +119,14 @@ class EditSportsFieldMutationIntegrationTest : BaseIntegrationTest() {
             When()
             val response =
                 dgsQueryExecutor.executeAndExtractJsonPathAsObject(
-                    editSportsFieldMutationRequest(sportsFieldDao.getDaoId().toString(), editInput),
+                    editSportsFieldMutationRequest(sportsFieldDao.getDaoId().value.toString(), editInput),
                     "data.editSportsField",
                     NotResourceOwnerError::class.java,
                 )
 
             Then()
             response.run {
-                message shouldBe "User pjm2 cannot edit sports field with id ${sportsFieldDao.getDaoId()} because he is not manager of this field."
+                message shouldBe "User pjm2 cannot edit sports field with id ${sportsFieldDao.getDaoId().value} because he is not manager of this field."
             }
         }
 

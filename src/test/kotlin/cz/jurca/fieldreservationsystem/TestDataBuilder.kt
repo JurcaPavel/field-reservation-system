@@ -2,12 +2,15 @@ package cz.jurca.fieldreservationsystem
 
 import cz.jurca.fieldreservationsystem.domain.SportType
 import cz.jurca.fieldreservationsystem.domain.UserRole
+import cz.jurca.fieldreservationsystem.repository.ReservationDao
 import cz.jurca.fieldreservationsystem.repository.SportTypeDao
 import cz.jurca.fieldreservationsystem.repository.SportsFieldDao
 import cz.jurca.fieldreservationsystem.repository.SportsFieldSportTypeDao
 import cz.jurca.fieldreservationsystem.repository.UserDao
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Component
+import java.time.OffsetDateTime
+import java.time.ZoneOffset
 
 @Component
 class TestDataBuilder(
@@ -52,7 +55,7 @@ class TestDataBuilder(
         longitude: Double = 14.412209,
         description: String? = "Skvělé hřiště uprostřed Karlova mostu!",
         sportTypes: List<SportType> = listOf(SportType.SOCCER, SportType.BASKETBALL),
-        managerId: Int = defaultManager.getDaoId(),
+        managerId: Int = defaultManager.getDaoId().value,
     ): SportsFieldDao =
         repository.saveSportsField(
             SportsFieldDao(
@@ -70,13 +73,32 @@ class TestDataBuilder(
             sportTypes.forEach { sportType ->
                 repository.saveSportsFieldSportsType(
                     SportsFieldSportTypeDao(
-                        sportsFieldId = it.getDaoId(),
-                        sportTypeId = repository.findSportTypeByName(sportType.name).getDaoId(),
+                        sportsFieldId = it.getDaoId().value,
+                        sportTypeId = repository.findSportTypeByName(sportType.name).getDaoId().value,
                     ),
                 )
             }
             it
         }
+
+    fun buildReservation(
+        ownerId: Int,
+        sportsFieldId: Int,
+        startTime: OffsetDateTime = OffsetDateTime.of(2100, 6, 28, 10, 0, 0, 0, ZoneOffset.UTC),
+        endTime: OffsetDateTime = OffsetDateTime.of(2100, 6, 28, 12, 0, 0, 0, ZoneOffset.UTC),
+        userNote: String? = "User note for reservation",
+        ownerNote: String? = "Owner note for reservation",
+    ): ReservationDao =
+        repository.saveReservation(
+            ReservationDao(
+                ownerId = ownerId,
+                sportsFieldId = sportsFieldId,
+                startTime = startTime,
+                endTime = endTime,
+                userNote = userNote,
+                ownerNote = ownerNote,
+            ),
+        )
 
     fun buildSportsFieldSportsType(
         sportsFieldId: Int,

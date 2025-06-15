@@ -6,9 +6,9 @@ schema {
 type Query {
   sportsFieldAvailability(
     id: ID!,
-    availabilityInput: AvailabilityFilterInput
-  ): SportsFieldAvailability
-  reservation(id: ID!): Reservation
+    availabilityInput: AvailabilityFilterInput!
+  ): SportsFieldAvailabilityResult!
+  reservation(id: ID!): ReservationResult!
   reservations(
     filters: ReservationFiltersInput,
     pagination: PaginationInput!,
@@ -123,12 +123,14 @@ type ReservationsWrapper {
 input CreateReservationInput {
   sportsFieldId: ID!
   timeslot: TimeSlotInput!
-  additionalInfo: String
+  userNote: String
+  ownerNote: String
 }
 
 input EditReservationInput {
   timeslot: TimeSlotInput!
-  additionalInfo: String
+  userNote: String
+  ownerNote: String
 }
 
 input ReservationFiltersInput {
@@ -149,6 +151,8 @@ type AlreadyReservedError {
 type PastReservationCancellationError {
   message: String!
 }
+
+union ReservationResult = Reservation | NotFoundError | NotResourceOwnerError
 
 #
 # Sports Field Availability
@@ -177,6 +181,8 @@ enum AvailabilityPeriod {
   WEEK
   MONTH
 }
+
+union SportsFieldAvailabilityResult = SportsFieldAvailability | NotFoundError
 
 #
 # Location

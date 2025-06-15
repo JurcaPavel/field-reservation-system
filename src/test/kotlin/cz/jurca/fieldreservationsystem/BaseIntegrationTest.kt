@@ -15,6 +15,7 @@ import org.springframework.test.context.DynamicPropertySource
 import org.springframework.test.web.reactive.server.WebTestClient
 import org.testcontainers.containers.PostgreSQLContainer
 import org.testcontainers.utility.DockerImageName
+import java.util.*
 
 @ActiveProfiles("test")
 @SpringBootTest(classes = [FieldReservationSystemApplication::class], webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
@@ -61,6 +62,7 @@ abstract class BaseIntegrationTest : BaseTest() {
 
     @BeforeEach
     fun prepareTestCase() {
+        TimeZone.setDefault(TimeZone.getTimeZone("UTC"))
         dataBuilder.deleteAll()
         dataBuilder.buildInitialData()
     }
@@ -68,7 +70,7 @@ abstract class BaseIntegrationTest : BaseTest() {
     protected fun setUserInTestSecurityContextHolder(user: UserDao) {
         val userDetails =
             SecurityConfiguration.CustomUserDetails(
-                id = user.getDaoId(),
+                id = user.getDaoId().value,
                 username = user.username,
                 password = user.password,
                 role = user.role,

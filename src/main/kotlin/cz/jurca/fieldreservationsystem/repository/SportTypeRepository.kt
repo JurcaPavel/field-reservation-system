@@ -31,7 +31,9 @@ data class SportTypeDao(
     @Id
     private var id: Int? = null
 
-    fun getDaoId(): Int = id!!
+    fun getDaoId(): SportTypeDaoId = SportTypeDaoId(id!!)
 
     fun toDomain() = SportType.valueOf(name)
 }
+
+data class SportTypeDaoId(val value: Int)

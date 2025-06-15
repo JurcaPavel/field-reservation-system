@@ -182,12 +182,12 @@ class SportsFieldsQueryIntegrationTest : BaseIntegrationTest() {
             val soccerDao = repository.findSportTypeByName(SportType.SOCCER.name)
             val basketballDao = repository.findSportTypeByName(SportType.BASKETBALL.name)
             dataBuilder.buildSportsFieldSportsType(
-                sportsFieldId = bratislavaSportsFieldDao.getDaoId(),
-                sportTypeId = soccerDao.getDaoId(),
+                sportsFieldId = bratislavaSportsFieldDao.getDaoId().value,
+                sportTypeId = soccerDao.getDaoId().value,
             )
             dataBuilder.buildSportsFieldSportsType(
-                sportsFieldId = viennaSportsFieldDao.getDaoId(),
-                sportTypeId = basketballDao.getDaoId(),
+                sportsFieldId = viennaSportsFieldDao.getDaoId().value,
+                sportTypeId = basketballDao.getDaoId().value,
             )
             val paginationInput = PaginationInput(1, 10)
             val filtersInput = SportsFieldFiltersInput(sportTypes = listOf(SportType.BASKETBALL))

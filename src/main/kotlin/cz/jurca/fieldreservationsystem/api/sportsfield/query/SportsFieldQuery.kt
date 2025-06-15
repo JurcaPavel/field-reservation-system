@@ -20,7 +20,7 @@ class SportsFieldQuery(private val validator: IdValidator, private val cacheProv
         @InputArgument id: Int,
     ): SportsFieldResult =
         // TODO think of a nicer way to cache
-        cacheProvider.get(id.toString(), SportsField::class.java)
+        cacheProvider.get(SPORTS_FIELD_KEY + id.toString(), SportsField::class.java)
             ?: when (val idResult = validator.existsSportsField(id)) {
                 is SportsFieldId -> {
                     cacheProvider.put(SPORTS_FIELD_KEY + id.toString(), idResult.getDetail().toApi())

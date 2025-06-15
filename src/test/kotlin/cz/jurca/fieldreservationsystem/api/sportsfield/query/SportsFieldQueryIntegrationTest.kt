@@ -39,14 +39,14 @@ class SportsFieldQueryIntegrationTest : BaseIntegrationTest() {
             When()
             val response =
                 dgsQueryExecutor.executeAndExtractJsonPathAsObject(
-                    sportsFieldQueryRequest(testedDao.getDaoId()),
+                    sportsFieldQueryRequest(testedDao.getDaoId().value),
                     "data.sportsField",
                     SportsField::class.java,
                 )
 
             Then()
             response.run {
-                id shouldBe testedDao.getDaoId().toString()
+                id shouldBe testedDao.getDaoId().value.toString()
                 name shouldBe "Field 2"
                 coordinates.latitude shouldBe 48.2089
                 coordinates.longitude shouldBe 16.3726

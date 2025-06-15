@@ -18,5 +18,7 @@ data class SportsFieldSportTypeDao(
     @Id
     private var id: Int? = null
 
-    fun getDaoId(): Int = id!!
+    fun getDaoId(): SportsFieldSportTypeDaoId = SportsFieldSportTypeDaoId(id!!)
 }
+
+data class SportsFieldSportTypeDaoId(val value: Int)

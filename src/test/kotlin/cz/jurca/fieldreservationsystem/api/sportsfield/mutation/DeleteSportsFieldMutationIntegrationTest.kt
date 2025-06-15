@@ -20,7 +20,7 @@ class DeleteSportsFieldMutationIntegrationTest : BaseIntegrationTest() {
             When()
             val response =
                 dgsQueryExecutor.executeAndExtractJsonPathAsObject(
-                    deleteSportsFieldMutationRequest(sportsFieldDao.getDaoId().toString()),
+                    deleteSportsFieldMutationRequest(sportsFieldDao.getDaoId().value.toString()),
                     "data.deleteSportsField",
                     Success::class.java,
                 )
@@ -43,7 +43,7 @@ class DeleteSportsFieldMutationIntegrationTest : BaseIntegrationTest() {
             When()
             val response =
                 dgsQueryExecutor.executeAndExtractJsonPathAsObject(
-                    deleteSportsFieldMutationRequest(sportsFieldDao.getDaoId().toString()),
+                    deleteSportsFieldMutationRequest(sportsFieldDao.getDaoId().value.toString()),
                     "data.deleteSportsField",
                     Success::class.java,
                 )
@@ -67,14 +67,14 @@ class DeleteSportsFieldMutationIntegrationTest : BaseIntegrationTest() {
             When()
             val response =
                 dgsQueryExecutor.executeAndExtractJsonPathAsObject(
-                    deleteSportsFieldMutationRequest(sportsFieldDao.getDaoId().toString()),
+                    deleteSportsFieldMutationRequest(sportsFieldDao.getDaoId().value.toString()),
                     "data.deleteSportsField",
                     NotResourceOwnerError::class.java,
                 )
 
             Then()
             response.run {
-                message shouldBe "User pjm2 cannot delete sports field  with id ${sportsFieldDao.getDaoId()} because he is not the owner of the sports field."
+                message shouldBe "User pjm2 cannot delete sports field  with id ${sportsFieldDao.getDaoId().value} because he is not the owner of the sports field."
             }
             repository.findAllSportFields().size shouldBe 1
             repository.findAllSportFieldSportTypes().size shouldBe 2
@@ -91,14 +91,14 @@ class DeleteSportsFieldMutationIntegrationTest : BaseIntegrationTest() {
             When()
             val response =
                 dgsQueryExecutor.executeAndExtractJsonPathAsObject(
-                    deleteSportsFieldMutationRequest(sportsFieldDao.getDaoId().toString()),
+                    deleteSportsFieldMutationRequest(sportsFieldDao.getDaoId().value.toString()),
                     "data.deleteSportsField",
                     NotManagerOrAdminError::class.java,
                 )
 
             Then()
             response.run {
-                message shouldBe "User pj cannot delete sports field  with id ${sportsFieldDao.getDaoId()} because he is not a manager or admin."
+                message shouldBe "User pj cannot delete sports field  with id ${sportsFieldDao.getDaoId().value} because he is not a manager or admin."
             }
             repository.findAllSportFields().size shouldBe 1
             repository.findAllSportFieldSportTypes().size shouldBe 2

@@ -39,7 +39,7 @@ data class SportsFieldDao(
     @Id
     private var id: Int? = null
 
-    fun getDaoId(): Int = id!!
+    fun getDaoId(): SportsFieldDaoId = SportsFieldDaoId(id!!)
 
     suspend fun toDomain(
         idProvider: suspend (UnvalidatedSportsFieldId) -> SportsFieldId?,
@@ -47,7 +47,7 @@ data class SportsFieldDao(
         sportTypes: List<SportType>,
     ): SportsField {
         return SportsField(
-            id = requireNotNull(UnvalidatedSportsFieldId(getDaoId()).validate(idProvider).getOrNull()) { "This should never happen as the id comes from db already. " },
+            id = requireNotNull(UnvalidatedSportsFieldId(getDaoId().value).validate(idProvider).getOrNull()) { "This should never happen as the id comes from db already. " },
             name = Name(name),
             address =
                 Address(
@@ -63,3 +63,5 @@ data class SportsFieldDao(
         )
     }
 }
+
+data class SportsFieldDaoId(val value: Int)

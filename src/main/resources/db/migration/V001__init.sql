@@ -44,3 +44,17 @@ CREATE TABLE IF NOT EXISTS sports_field_sport_type
   sport_type_id   INTEGER REFERENCES sport_type (id)   NOT NULL,
   CONSTRAINT unique_sports_field_sport_type UNIQUE (sports_field_id, sport_type_id)
 );
+CREATE INDEX IF NOT EXISTS idx_sports_field_sport_type_sports_field_id
+  ON sports_field_sport_type (sports_field_id);
+
+CREATE TABLE IF NOT EXISTS reservation
+(
+  id              SERIAL PRIMARY KEY                   NOT NULL,
+  owner_id        INTEGER REFERENCES app_user (id)     NOT NULL,
+  sports_field_id INTEGER REFERENCES sports_field (id) NOT NULL,
+  start_time      TIMESTAMP WITH TIME ZONE             NOT NULL,
+  end_time        TIMESTAMP WITH TIME ZONE             NOT NULL,
+  user_note       VARCHAR(1024),
+  owner_note      VARCHAR(1024),
+  CONSTRAINT unique_reservation UNIQUE (sports_field_id, start_time, end_time)
+);

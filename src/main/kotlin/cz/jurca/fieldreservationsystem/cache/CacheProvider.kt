@@ -15,9 +15,8 @@ interface CacheProvider {
         ttl: Duration = Duration.ZERO,
     ): T
 
-    suspend fun evict(
-        key: String,
-    ): Boolean
+    suspend fun evict(key: String): Boolean
 }
 
 const val SPORTS_FIELD_KEY = "sportsField-"
+const val RESERVATION_KEY = "reservation-"

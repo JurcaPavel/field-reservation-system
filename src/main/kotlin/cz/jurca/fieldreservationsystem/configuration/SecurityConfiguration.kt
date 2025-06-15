@@ -63,7 +63,7 @@ class SecurityConfiguration(
                 .mapNotNull { userDao ->
                     userDao?.let {
                         CustomUserDetails(
-                            id = userDao.getDaoId(),
+                            id = userDao.getDaoId().value,
                             username = userDao.username,
                             password = userDao.password,
                             role = "ROLE_" + userDao.role,
