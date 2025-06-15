@@ -76,4 +76,9 @@ class TestRepository(
         runBlocking {
             reservationRepository.findAll().toList()
         }
+
+    fun findAllUsers(): List<UserDao> =
+        runBlocking {
+            userRepository.findAll().toList()
+        }
 }

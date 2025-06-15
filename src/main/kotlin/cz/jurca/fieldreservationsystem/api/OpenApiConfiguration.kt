@@ -51,6 +51,43 @@ class OpenApiConfiguration {
                     ],
                 ),
         ),
+        RouterOperation(
+            path = "/public/v1/register",
+            method = arrayOf(RequestMethod.POST),
+            operation =
+                Operation(
+                    tags = ["Registration"],
+                    operationId = "register",
+                    summary = "User registration",
+                    description = "Register a new user with name, username, email, password, and role.",
+                    requestBody =
+                        RequestBody(
+                            required = true,
+                            content = [
+                                Content(
+                                    schema = Schema(implementation = UserHandler.RegistrationInput::class),
+                                ),
+                            ],
+                        ),
+                    responses = [
+                        ApiResponse(
+                            responseCode = "201",
+                            description = "User registered successfully",
+                            content = [Content(schema = Schema(implementation = UserHandler.RegistrationOutput::class))],
+                        ),
+                        ApiResponse(
+                            responseCode = "400",
+                            description = "Bad request - invalid email, empty email, registering as admin",
+                            content = [Content(schema = Schema(implementation = UserHandler.RegistrationOutput::class))],
+                        ),
+                        ApiResponse(
+                            responseCode = "409",
+                            description = "Conflict - username or email already exists",
+                            content = [Content(schema = Schema(implementation = UserHandler.RegistrationOutput::class))],
+                        ),
+                    ],
+                ),
+        ),
     )
     @Bean
     fun openApiConfig(): RouterFunction<ServerResponse> {

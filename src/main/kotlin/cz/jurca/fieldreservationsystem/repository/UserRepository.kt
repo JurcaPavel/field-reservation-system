@@ -15,6 +15,10 @@ import reactor.core.publisher.Mono
 
 interface UserRepository : CoroutineCrudRepository<UserDao, Int> {
     fun findByUsername(username: String): Mono<UserDao?>
+
+    suspend fun existsByUsername(username: String): Boolean
+
+    suspend fun existsByEmail(email: String): Boolean
 }
 
 @Table("app_user")

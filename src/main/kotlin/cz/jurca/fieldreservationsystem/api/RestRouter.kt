@@ -11,5 +11,6 @@ class RestRouter {
     fun mainRouter(userHandler: UserHandler) =
         coRouter {
             POST("/public/v1/authenticate", userHandler::authenticate)
+            POST("/public/v1/register", userHandler::register)
         }
 }

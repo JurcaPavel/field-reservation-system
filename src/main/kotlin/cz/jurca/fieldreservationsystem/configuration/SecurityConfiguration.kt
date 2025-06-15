@@ -43,6 +43,7 @@ class SecurityConfiguration(
                 }
             }.authorizeExchange { exchanges ->
                 exchanges.pathMatchers("/public/v1/authenticate").permitAll()
+                exchanges.pathMatchers("/public/v1/register").permitAll()
                 exchanges.pathMatchers("/**").authenticated()
             }.httpBasic(Customizer.withDefaults())
 
