@@ -1,4 +1,4 @@
-package cz.jurca.fieldreservationsystem.api.reservation
+package cz.jurca.fieldreservationsystem.api.reservation.query
 
 import cz.jurca.fieldreservationsystem.BaseIntegrationTest
 import cz.jurca.fieldreservationsystem.codegen.DgsClient
@@ -48,7 +48,7 @@ class ReservationQueryIntegrationTest : BaseIntegrationTest() {
                 OffsetDateTime.parse(timeslot.startTime).toInstant() shouldBe OffsetDateTime.of(2100, 6, 28, 10, 0, 0, 0, ZoneOffset.UTC).toInstant()
                 OffsetDateTime.parse(timeslot.endTime).toInstant() shouldBe OffsetDateTime.of(2100, 6, 28, 12, 0, 0, 0, ZoneOffset.UTC).toInstant()
                 userNote shouldBe "User note for reservation"
-                ownerNote shouldBe "Owner note for reservation"
+                fieldManagerNote shouldBe "Field manager note for reservation"
             }
         }
 
@@ -95,7 +95,7 @@ class ReservationQueryIntegrationTest : BaseIntegrationTest() {
                         endTime
                     }
                     userNote
-                    ownerNote
+                    fieldManagerNote
                 }
                 onNotFoundError { message }
             }

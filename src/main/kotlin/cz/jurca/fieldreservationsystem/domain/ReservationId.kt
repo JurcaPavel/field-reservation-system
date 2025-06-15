@@ -13,9 +13,9 @@ data class ReservationId(
         either {
             val reservation = detailProvider(this@ReservationId)
             ensure(
-                loginUser.isAdmin()
-                    || loginUser.isOwnerOfReservation(reservation)
-                    || loginUser.isSportsFieldOwner(reservation.sportsFieldId)
+                loginUser.isAdmin() ||
+                    loginUser.isOwnerOfReservation(reservation) ||
+                    loginUser.isSportsFieldOwner(reservation.sportsFieldId),
             ) { NotResourceOwnerError("User ${loginUser.username.value} is not an owner of the reservation with id $value") }
             reservation
         }

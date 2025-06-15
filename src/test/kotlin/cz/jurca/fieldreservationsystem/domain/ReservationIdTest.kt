@@ -13,12 +13,13 @@ class ReservationIdTest : BaseTest() {
         runBlocking {
             Given()
             val reservation = mock<Reservation>()
-            val loginUser = LoginUser(
-                id = mock(),
-                username = Username("admin"),
-                role = UserRole.ADMIN,
-                isSportsFieldOwnerProvider = { _, _ -> false }
-            )
+            val loginUser =
+                LoginUser(
+                    id = mock(),
+                    username = Username("admin"),
+                    role = UserRole.ADMIN,
+                    isSportsFieldOwnerProvider = { _, _ -> false },
+                )
             val reservationId = ReservationId(1) { reservation }
 
             When()
@@ -34,12 +35,13 @@ class ReservationIdTest : BaseTest() {
             Given()
             val userId = mock<UserId>()
             val reservation = Reservation(mock(), userId, mock(), mock(), mock(), mock())
-            val loginUser = LoginUser(
-                id = userId,
-                username = Username("owner"),
-                role = UserRole.BASIC,
-                isSportsFieldOwnerProvider = { _, _ -> false }
-            )
+            val loginUser =
+                LoginUser(
+                    id = userId,
+                    username = Username("owner"),
+                    role = UserRole.BASIC,
+                    isSportsFieldOwnerProvider = { _, _ -> false },
+                )
             val reservationId = ReservationId(1) { reservation }
 
             When()
@@ -54,12 +56,13 @@ class ReservationIdTest : BaseTest() {
         runBlocking {
             Given()
             val reservation = Reservation(mock(), mock(), mock(), mock(), mock(), mock())
-            val loginUser = LoginUser(
-                id = mock(),
-                username = Username("fieldOwner"),
-                role = UserRole.BASIC,
-                isSportsFieldOwnerProvider = { _, _ -> true }
-            )
+            val loginUser =
+                LoginUser(
+                    id = mock(),
+                    username = Username("fieldOwner"),
+                    role = UserRole.BASIC,
+                    isSportsFieldOwnerProvider = { _, _ -> true },
+                )
             val reservationId = ReservationId(1) { reservation }
 
             When()
@@ -76,12 +79,13 @@ class ReservationIdTest : BaseTest() {
             val userId = UserId(1) { mock() }
             val otherUserId = UserId(2) { mock() }
             val reservation = Reservation(mock(), userId, mock(), mock(), mock(), mock())
-            val loginUser = LoginUser(
-                id = otherUserId,
-                username = Username("otherUser"),
-                role = UserRole.BASIC,
-                isSportsFieldOwnerProvider = { _, _ -> false }
-            )
+            val loginUser =
+                LoginUser(
+                    id = otherUserId,
+                    username = Username("otherUser"),
+                    role = UserRole.BASIC,
+                    isSportsFieldOwnerProvider = { _, _ -> false },
+                )
             val reservationId = ReservationId(1) { reservation }
 
             When()

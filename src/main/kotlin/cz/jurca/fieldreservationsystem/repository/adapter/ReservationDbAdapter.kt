@@ -1,10 +1,15 @@
 package cz.jurca.fieldreservationsystem.repository.adapter
 
+import cz.jurca.fieldreservationsystem.domain.NewReservation
 import cz.jurca.fieldreservationsystem.domain.Reservation
 import cz.jurca.fieldreservationsystem.domain.ReservationId
+import cz.jurca.fieldreservationsystem.domain.SportsFieldId
+import cz.jurca.fieldreservationsystem.domain.TimeSlot
 import cz.jurca.fieldreservationsystem.domain.UnvalidatedReservationId
+import cz.jurca.fieldreservationsystem.repository.ReservationDao
 import cz.jurca.fieldreservationsystem.repository.ReservationRepository
 import org.springframework.stereotype.Component
+import org.springframework.transaction.annotation.Transactional
 
 @Component
 class ReservationDbAdapter(
@@ -12,6 +17,8 @@ class ReservationDbAdapter(
     private val sportsFieldDbAdapter: SportsFieldDbAdapter,
     private val userDbAdapter: UserDbAdapter,
 ) {
+    internal fun getId(dao: ReservationDao): ReservationId = ReservationId(dao.getDaoId().value, this::getDetail)
+
     suspend fun findReservation(id: UnvalidatedReservationId): ReservationId? =
         reservationRepository.findById(id.value)
             ?.run { ReservationId(this.getDaoId().value, this@ReservationDbAdapter::getDetail) }
@@ -24,4 +31,28 @@ class ReservationDbAdapter(
                 sportsFieldId = sportsFieldDbAdapter.getId(dao.getSportsFieldDaoId()),
             )
         }
+
+    @Transactional
+    suspend fun create(newReservation: NewReservation): Reservation =
+        reservationRepository.save(
+            ReservationDao(
+                ownerId = newReservation.ownerId.value,
+                sportsFieldId = newReservation.sportsFieldId.value,
+                startTime = newReservation.timeSlot.startTime.value,
+                endTime = newReservation.timeSlot.endTime.value,
+                userNote = newReservation.userNote?.value,
+                fieldManagerNote = newReservation.fieldManagerNote?.value,
+            ),
+        ).let { dao ->
+            dao.toDomain(
+                id = getId(dao),
+                ownerId = userDbAdapter.getId(dao.getOwnerDaoId()),
+                sportsFieldId = sportsFieldDbAdapter.getId(dao.getSportsFieldDaoId()),
+            )
+        }
+
+    suspend fun isAlreadyReserved(
+        sportsFieldId: SportsFieldId,
+        timeSlot: TimeSlot,
+    ): Boolean = reservationRepository.findBySportsFieldIdAndStartTimeAndEndTime(sportsFieldId.value, timeSlot.startTime.value, timeSlot.endTime.value) != null
 }

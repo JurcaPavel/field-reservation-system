@@ -112,7 +112,7 @@ type Reservation {
   sportsFieldId: ID!
   timeslot: TimeSlot!
   userNote: String
-  ownerNote: String
+  fieldManagerNote: String
 }
 
 type ReservationsWrapper {
@@ -124,13 +124,13 @@ input CreateReservationInput {
   sportsFieldId: ID!
   timeslot: TimeSlotInput!
   userNote: String
-  ownerNote: String
+  fieldManagerNote: String
 }
 
 input EditReservationInput {
   timeslot: TimeSlotInput!
   userNote: String
-  ownerNote: String
+  fieldManagerNote: String
 }
 
 input ReservationFiltersInput {
@@ -140,7 +140,7 @@ input ReservationFiltersInput {
 
 union CancelReservationResult = Success | NotFoundError | NotResourceOwnerError | PastReservationCancellationError
 
-union CreateReservationResult = Reservation | AlreadyReservedError
+union CreateReservationResult = Reservation | AlreadyReservedError | NotFoundError
 
 union EditReservationResult = Reservation | NotFoundError | NotResourceOwnerError
 

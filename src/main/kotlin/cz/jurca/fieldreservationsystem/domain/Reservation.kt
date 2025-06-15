@@ -6,5 +6,5 @@ class Reservation(
     val sportsFieldId: SportsFieldId,
     val timeSlot: TimeSlot,
     val userNote: Note?,
-    val ownerNote: Note?,
+    val fieldManagerNote: Note?,
 )

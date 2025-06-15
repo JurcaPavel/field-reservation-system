@@ -55,6 +55,12 @@ CREATE TABLE IF NOT EXISTS reservation
   start_time      TIMESTAMP WITH TIME ZONE             NOT NULL,
   end_time        TIMESTAMP WITH TIME ZONE             NOT NULL,
   user_note       VARCHAR(1024),
-  owner_note      VARCHAR(1024),
+  field_manager_note      VARCHAR(1024),
   CONSTRAINT unique_reservation UNIQUE (sports_field_id, start_time, end_time)
 );
+CREATE INDEX IF NOT EXISTS idx_reservation_sports_field_id
+  ON reservation (sports_field_id);
+CREATE INDEX IF NOT EXISTS idx_reservation_start_time
+  ON reservation (start_time);
+CREATE INDEX IF NOT EXISTS idx_reservation_end_time
+  ON reservation (end_time);

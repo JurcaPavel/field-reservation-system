@@ -1,5 +1,6 @@
 package cz.jurca.fieldreservationsystem.api
 
+import cz.jurca.fieldreservationsystem.codegen.types.AlreadyReservedError
 import cz.jurca.fieldreservationsystem.codegen.types.NotResourceOwnerError
 import cz.jurca.fieldreservationsystem.codegen.types.Reservation
 import cz.jurca.fieldreservationsystem.codegen.types.SportType
@@ -31,7 +32,7 @@ fun cz.jurca.fieldreservationsystem.domain.Reservation.toApi(): Reservation =
         sportsFieldId = { this.sportsFieldId.value.toString() },
         timeslot = { this.timeSlot.toApi() },
         userNote = { this.userNote?.value },
-        ownerNote = { this.ownerNote?.value },
+        fieldManagerNote = { this.fieldManagerNote?.value },
     )
 
 fun cz.jurca.fieldreservationsystem.domain.Success.toApi(message: String): Success = Success({ message })
@@ -52,3 +53,5 @@ fun cz.jurca.fieldreservationsystem.domain.TimeSlot.toApi(): TimeSlot =
     )
 
 fun cz.jurca.fieldreservationsystem.domain.error.NotResourceOwnerError.toApi(): NotResourceOwnerError = NotResourceOwnerError({ this.message })
+
+fun cz.jurca.fieldreservationsystem.domain.error.AlreadyReservedError.toApi(): AlreadyReservedError = AlreadyReservedError({ this.message })

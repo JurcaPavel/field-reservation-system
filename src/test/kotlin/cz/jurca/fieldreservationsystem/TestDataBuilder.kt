@@ -87,7 +87,7 @@ class TestDataBuilder(
         startTime: OffsetDateTime = OffsetDateTime.of(2100, 6, 28, 10, 0, 0, 0, ZoneOffset.UTC),
         endTime: OffsetDateTime = OffsetDateTime.of(2100, 6, 28, 12, 0, 0, 0, ZoneOffset.UTC),
         userNote: String? = "User note for reservation",
-        ownerNote: String? = "Owner note for reservation",
+        fieldManagerNote: String? = "Field manager note for reservation",
     ): ReservationDao =
         repository.saveReservation(
             ReservationDao(
@@ -96,7 +96,7 @@ class TestDataBuilder(
                 startTime = startTime,
                 endTime = endTime,
                 userNote = userNote,
-                ownerNote = ownerNote,
+                fieldManagerNote = fieldManagerNote,
             ),
         )
 

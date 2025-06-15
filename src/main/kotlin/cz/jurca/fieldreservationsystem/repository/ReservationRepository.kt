@@ -14,7 +14,13 @@ import org.springframework.stereotype.Repository
 import java.time.OffsetDateTime
 
 @Repository
-interface ReservationRepository : CoroutineCrudRepository<ReservationDao, Int>
+interface ReservationRepository : CoroutineCrudRepository<ReservationDao, Int> {
+    suspend fun findBySportsFieldIdAndStartTimeAndEndTime(
+        sportsFieldId: Int,
+        startTime: OffsetDateTime,
+        endTime: OffsetDateTime,
+    ): ReservationDao?
+}
 
 @Table("reservation")
 data class ReservationDao(
@@ -23,7 +29,7 @@ data class ReservationDao(
     var startTime: OffsetDateTime,
     var endTime: OffsetDateTime,
     var userNote: String?,
-    var ownerNote: String?,
+    var fieldManagerNote: String?,
 ) {
     @Id
     private var id: Int? = null
@@ -49,7 +55,7 @@ data class ReservationDao(
                     endTime = DateTime(endTime),
                 ),
             userNote = userNote?.let { Note(it) },
-            ownerNote = ownerNote?.let { Note(it) },
+            fieldManagerNote = fieldManagerNote?.let { Note(it) },
         )
 }
 
