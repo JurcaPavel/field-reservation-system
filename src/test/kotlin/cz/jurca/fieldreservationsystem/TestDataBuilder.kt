@@ -2,11 +2,11 @@ package cz.jurca.fieldreservationsystem
 
 import cz.jurca.fieldreservationsystem.domain.SportType
 import cz.jurca.fieldreservationsystem.domain.UserRole
-import cz.jurca.fieldreservationsystem.repository.ReservationDao
-import cz.jurca.fieldreservationsystem.repository.SportTypeDao
-import cz.jurca.fieldreservationsystem.repository.SportsFieldDao
-import cz.jurca.fieldreservationsystem.repository.SportsFieldSportTypeDao
-import cz.jurca.fieldreservationsystem.repository.UserDao
+import cz.jurca.fieldreservationsystem.db.repository.ReservationDao
+import cz.jurca.fieldreservationsystem.db.repository.SportTypeDao
+import cz.jurca.fieldreservationsystem.db.repository.SportsFieldDao
+import cz.jurca.fieldreservationsystem.db.repository.SportsFieldSportTypeDao
+import cz.jurca.fieldreservationsystem.db.repository.UserDao
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Component
 import java.time.OffsetDateTime

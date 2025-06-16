@@ -4,8 +4,8 @@ import com.netflix.graphql.dgs.DgsComponent
 import com.netflix.graphql.dgs.DgsMutation
 import com.netflix.graphql.dgs.InputArgument
 import cz.jurca.fieldreservationsystem.api.toApi
-import cz.jurca.fieldreservationsystem.cache.CacheProvider
-import cz.jurca.fieldreservationsystem.cache.SPORTS_FIELD_KEY
+import cz.jurca.fieldreservationsystem.platform.cache.CacheProvider
+import cz.jurca.fieldreservationsystem.platform.cache.SPORTS_FIELD_KEY
 import cz.jurca.fieldreservationsystem.codegen.types.EditSportsFieldInput
 import cz.jurca.fieldreservationsystem.codegen.types.EditSportsFieldResult
 import cz.jurca.fieldreservationsystem.domain.Address
@@ -26,7 +26,7 @@ import cz.jurca.fieldreservationsystem.domain.UpdatedSportsField
 import cz.jurca.fieldreservationsystem.domain.ZipCode
 import cz.jurca.fieldreservationsystem.domain.error.ApiNotFoundError
 import cz.jurca.fieldreservationsystem.domain.error.ApiNotResourceOwnerError
-import cz.jurca.fieldreservationsystem.repository.adapter.SportsFieldDbAdapter
+import cz.jurca.fieldreservationsystem.db.adapter.SportsFieldDbAdapter
 
 @DgsComponent
 class EditSportsFieldMutation(

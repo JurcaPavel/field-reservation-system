@@ -1,8 +1,8 @@
 package cz.jurca.fieldreservationsystem.domain
 
 import cz.jurca.fieldreservationsystem.configuration.SecurityConfiguration
-import cz.jurca.fieldreservationsystem.repository.adapter.SportsFieldDbAdapter
-import cz.jurca.fieldreservationsystem.repository.adapter.UserDbAdapter
+import cz.jurca.fieldreservationsystem.db.adapter.SportsFieldDbAdapter
+import cz.jurca.fieldreservationsystem.db.adapter.UserDbAdapter
 import kotlinx.coroutines.reactor.awaitSingleOrNull
 import org.springframework.security.authentication.AuthenticationCredentialsNotFoundException
 import org.springframework.security.core.Authentication

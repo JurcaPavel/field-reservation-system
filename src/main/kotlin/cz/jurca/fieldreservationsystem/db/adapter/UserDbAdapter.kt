@@ -1,4 +1,4 @@
-package cz.jurca.fieldreservationsystem.repository.adapter
+package cz.jurca.fieldreservationsystem.db.adapter
 
 import cz.jurca.fieldreservationsystem.domain.Email
 import cz.jurca.fieldreservationsystem.domain.NewUserRegistration
@@ -6,10 +6,9 @@ import cz.jurca.fieldreservationsystem.domain.UnvalidatedUserId
 import cz.jurca.fieldreservationsystem.domain.User
 import cz.jurca.fieldreservationsystem.domain.UserId
 import cz.jurca.fieldreservationsystem.domain.Username
-import cz.jurca.fieldreservationsystem.repository.UserDao
-import cz.jurca.fieldreservationsystem.repository.UserDaoId
-import cz.jurca.fieldreservationsystem.repository.UserRepository
-import kotlinx.coroutines.reactor.awaitSingleOrNull
+import cz.jurca.fieldreservationsystem.db.repository.UserDao
+import cz.jurca.fieldreservationsystem.db.repository.UserDaoId
+import cz.jurca.fieldreservationsystem.db.repository.UserRepository
 import org.springframework.stereotype.Component
 import org.springframework.transaction.annotation.Transactional
 

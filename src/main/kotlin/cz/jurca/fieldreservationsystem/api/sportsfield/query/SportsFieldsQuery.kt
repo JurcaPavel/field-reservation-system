@@ -12,7 +12,7 @@ import cz.jurca.fieldreservationsystem.codegen.types.SportsFieldsWrapper
 import cz.jurca.fieldreservationsystem.domain.City
 import cz.jurca.fieldreservationsystem.domain.SportsFieldFilter
 import cz.jurca.fieldreservationsystem.domain.UnloadedFilteredPage
-import cz.jurca.fieldreservationsystem.repository.adapter.SportsFieldDbAdapter
+import cz.jurca.fieldreservationsystem.db.adapter.SportsFieldDbAdapter
 
 @DgsComponent
 class SportsFieldsQuery(private val sportsFieldDbAdapter: SportsFieldDbAdapter) {

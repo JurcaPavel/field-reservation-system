@@ -1,6 +1,6 @@
 package cz.jurca.fieldreservationsystem.configuration
 
-import cz.jurca.fieldreservationsystem.secret.SecretProvider
+import cz.jurca.fieldreservationsystem.platform.secret.SecretProvider
 import org.springframework.cache.annotation.EnableCaching
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration

@@ -1,15 +1,15 @@
 package cz.jurca.fieldreservationsystem
 
-import cz.jurca.fieldreservationsystem.repository.ReservationDao
-import cz.jurca.fieldreservationsystem.repository.ReservationRepository
-import cz.jurca.fieldreservationsystem.repository.SportTypeDao
-import cz.jurca.fieldreservationsystem.repository.SportTypeRepository
-import cz.jurca.fieldreservationsystem.repository.SportsFieldDao
-import cz.jurca.fieldreservationsystem.repository.SportsFieldRepository
-import cz.jurca.fieldreservationsystem.repository.SportsFieldSportTypeDao
-import cz.jurca.fieldreservationsystem.repository.SportsFieldSportTypeRepository
-import cz.jurca.fieldreservationsystem.repository.UserDao
-import cz.jurca.fieldreservationsystem.repository.UserRepository
+import cz.jurca.fieldreservationsystem.db.repository.ReservationDao
+import cz.jurca.fieldreservationsystem.db.repository.ReservationRepository
+import cz.jurca.fieldreservationsystem.db.repository.SportTypeDao
+import cz.jurca.fieldreservationsystem.db.repository.SportTypeRepository
+import cz.jurca.fieldreservationsystem.db.repository.SportsFieldDao
+import cz.jurca.fieldreservationsystem.db.repository.SportsFieldRepository
+import cz.jurca.fieldreservationsystem.db.repository.SportsFieldSportTypeDao
+import cz.jurca.fieldreservationsystem.db.repository.SportsFieldSportTypeRepository
+import cz.jurca.fieldreservationsystem.db.repository.UserDao
+import cz.jurca.fieldreservationsystem.db.repository.UserRepository
 import kotlinx.coroutines.flow.toList
 import kotlinx.coroutines.runBlocking
 import org.springframework.stereotype.Repository

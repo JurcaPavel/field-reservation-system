@@ -1,4 +1,4 @@
-package cz.jurca.fieldreservationsystem.cache
+package cz.jurca.fieldreservationsystem.platform.cache
 
 import java.time.Duration
 

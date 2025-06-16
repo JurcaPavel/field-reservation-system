@@ -16,7 +16,7 @@ import cz.jurca.fieldreservationsystem.domain.Username
 import cz.jurca.fieldreservationsystem.domain.error.EmailAlreadyExistsError
 import cz.jurca.fieldreservationsystem.domain.error.RegisterAsAdminError
 import cz.jurca.fieldreservationsystem.domain.error.UsernameAlreadyExistsError
-import cz.jurca.fieldreservationsystem.repository.adapter.UserDbAdapter
+import cz.jurca.fieldreservationsystem.db.adapter.UserDbAdapter
 import org.springframework.http.HttpHeaders
 import org.springframework.http.HttpStatus
 import org.springframework.security.core.userdetails.ReactiveUserDetailsService

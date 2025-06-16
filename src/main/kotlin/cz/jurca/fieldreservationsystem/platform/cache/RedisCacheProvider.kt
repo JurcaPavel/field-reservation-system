@@ -1,4 +1,4 @@
-package cz.jurca.fieldreservationsystem.cache
+package cz.jurca.fieldreservationsystem.platform.cache
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import io.github.oshai.kotlinlogging.KotlinLogging

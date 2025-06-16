@@ -1,4 +1,4 @@
-package cz.jurca.fieldreservationsystem.repository
+package cz.jurca.fieldreservationsystem.db.repository
 
 import cz.jurca.fieldreservationsystem.domain.DateTime
 import cz.jurca.fieldreservationsystem.domain.Note

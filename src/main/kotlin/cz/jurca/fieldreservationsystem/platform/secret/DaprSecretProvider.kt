@@ -1,4 +1,4 @@
-package cz.jurca.fieldreservationsystem.secret
+package cz.jurca.fieldreservationsystem.platform.secret
 
 import org.springframework.context.annotation.Profile
 import org.springframework.stereotype.Component

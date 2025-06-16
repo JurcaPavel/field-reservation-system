@@ -1,4 +1,4 @@
-package cz.jurca.fieldreservationsystem.repository.adapter
+package cz.jurca.fieldreservationsystem.db.adapter
 
 import cz.jurca.fieldreservationsystem.domain.SportsFieldId
 

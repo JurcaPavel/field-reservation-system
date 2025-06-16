@@ -1,8 +1,8 @@
-package cz.jurca.fieldreservationsystem.secret
+package cz.jurca.fieldreservationsystem.platform.secret
 
-import cz.jurca.fieldreservationsystem.secret.SecretProvider.DatabaseCredentials
-import cz.jurca.fieldreservationsystem.secret.SecretProvider.RedisCredentials
-import cz.jurca.fieldreservationsystem.secret.SecretProvider.Secret
+import cz.jurca.fieldreservationsystem.platform.secret.SecretProvider.DatabaseCredentials
+import cz.jurca.fieldreservationsystem.platform.secret.SecretProvider.RedisCredentials
+import cz.jurca.fieldreservationsystem.platform.secret.SecretProvider.Secret
 import org.springframework.context.annotation.Primary
 import org.springframework.context.annotation.Profile
 import org.springframework.stereotype.Component

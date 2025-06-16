@@ -1,6 +1,6 @@
 package cz.jurca.fieldreservationsystem.configuration
 
-import cz.jurca.fieldreservationsystem.secret.SecretProvider
+import cz.jurca.fieldreservationsystem.platform.secret.SecretProvider
 import io.github.oshai.kotlinlogging.KotlinLogging
 import io.r2dbc.postgresql.PostgresqlConnectionConfiguration
 import io.r2dbc.postgresql.PostgresqlConnectionFactory

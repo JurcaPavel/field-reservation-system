@@ -15,7 +15,7 @@ import cz.jurca.fieldreservationsystem.domain.SportFieldNotFound
 import cz.jurca.fieldreservationsystem.domain.SportsFieldId
 import cz.jurca.fieldreservationsystem.domain.TimeSlot
 import cz.jurca.fieldreservationsystem.domain.error.ApiNotFoundError
-import cz.jurca.fieldreservationsystem.repository.adapter.ReservationDbAdapter
+import cz.jurca.fieldreservationsystem.db.adapter.ReservationDbAdapter
 
 @DgsComponent
 class CreateReservationMutation(

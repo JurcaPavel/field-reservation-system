@@ -4,8 +4,8 @@ import com.netflix.graphql.dgs.DgsComponent
 import com.netflix.graphql.dgs.DgsQuery
 import com.netflix.graphql.dgs.InputArgument
 import cz.jurca.fieldreservationsystem.api.toApi
-import cz.jurca.fieldreservationsystem.cache.CacheProvider
-import cz.jurca.fieldreservationsystem.cache.SPORTS_FIELD_KEY
+import cz.jurca.fieldreservationsystem.platform.cache.CacheProvider
+import cz.jurca.fieldreservationsystem.platform.cache.SPORTS_FIELD_KEY
 import cz.jurca.fieldreservationsystem.codegen.types.NotFoundError
 import cz.jurca.fieldreservationsystem.codegen.types.SportsField
 import cz.jurca.fieldreservationsystem.codegen.types.SportsFieldResult

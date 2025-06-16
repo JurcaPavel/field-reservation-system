@@ -3,7 +3,7 @@ package cz.jurca.fieldreservationsystem
 import com.netflix.graphql.dgs.DgsQueryExecutor
 import com.netflix.graphql.dgs.test.EnableDgsTest
 import cz.jurca.fieldreservationsystem.configuration.SecurityConfiguration
-import cz.jurca.fieldreservationsystem.repository.UserDao
+import cz.jurca.fieldreservationsystem.db.repository.UserDao
 import io.kotest.extensions.spring.SpringExtension
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest

@@ -8,7 +8,7 @@ import cz.jurca.fieldreservationsystem.codegen.types.PaginationInput
 import cz.jurca.fieldreservationsystem.codegen.types.ReservationFiltersInput
 import cz.jurca.fieldreservationsystem.codegen.types.ReservationsWrapper
 import cz.jurca.fieldreservationsystem.domain.IdValidator
-import cz.jurca.fieldreservationsystem.repository.adapter.ReservationDbAdapter
+import cz.jurca.fieldreservationsystem.db.adapter.ReservationDbAdapter
 
 @DgsComponent
 class ReservationsQuery(private val idValidator: IdValidator, private val reservationDbAdapter: ReservationDbAdapter) {

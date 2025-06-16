@@ -1,4 +1,4 @@
-package cz.jurca.fieldreservationsystem.cache
+package cz.jurca.fieldreservationsystem.platform.cache
 
 import org.springframework.context.annotation.Profile
 import org.springframework.stereotype.Component

@@ -1,4 +1,4 @@
-package cz.jurca.fieldreservationsystem.repository
+package cz.jurca.fieldreservationsystem.db.repository
 
 import org.springframework.data.annotation.Id
 import org.springframework.data.relational.core.mapping.Table

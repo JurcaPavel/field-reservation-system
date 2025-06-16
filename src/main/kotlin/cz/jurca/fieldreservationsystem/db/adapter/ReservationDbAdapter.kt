@@ -1,4 +1,4 @@
-package cz.jurca.fieldreservationsystem.repository.adapter
+package cz.jurca.fieldreservationsystem.db.adapter
 
 import cz.jurca.fieldreservationsystem.domain.NewReservation
 import cz.jurca.fieldreservationsystem.domain.Reservation
@@ -6,8 +6,8 @@ import cz.jurca.fieldreservationsystem.domain.ReservationId
 import cz.jurca.fieldreservationsystem.domain.SportsFieldId
 import cz.jurca.fieldreservationsystem.domain.TimeSlot
 import cz.jurca.fieldreservationsystem.domain.UnvalidatedReservationId
-import cz.jurca.fieldreservationsystem.repository.ReservationDao
-import cz.jurca.fieldreservationsystem.repository.ReservationRepository
+import cz.jurca.fieldreservationsystem.db.repository.ReservationDao
+import cz.jurca.fieldreservationsystem.db.repository.ReservationRepository
 import org.springframework.stereotype.Component
 import org.springframework.transaction.annotation.Transactional
 

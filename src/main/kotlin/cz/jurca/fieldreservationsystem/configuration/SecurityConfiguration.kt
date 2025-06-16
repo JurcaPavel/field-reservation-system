@@ -1,6 +1,6 @@
 package cz.jurca.fieldreservationsystem.configuration
 
-import cz.jurca.fieldreservationsystem.repository.UserRepository
+import cz.jurca.fieldreservationsystem.db.repository.UserRepository
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration

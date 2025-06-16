@@ -1,8 +1,8 @@
 package cz.jurca.fieldreservationsystem.domain
 
-import cz.jurca.fieldreservationsystem.repository.adapter.ReservationDbAdapter
-import cz.jurca.fieldreservationsystem.repository.adapter.SportsFieldDbAdapter
-import cz.jurca.fieldreservationsystem.repository.adapter.UserDbAdapter
+import cz.jurca.fieldreservationsystem.db.adapter.ReservationDbAdapter
+import cz.jurca.fieldreservationsystem.db.adapter.SportsFieldDbAdapter
+import cz.jurca.fieldreservationsystem.db.adapter.UserDbAdapter
 import org.springframework.stereotype.Component
 
 @Component
