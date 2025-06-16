@@ -62,7 +62,6 @@ abstract class BaseIntegrationTest : BaseTest() {
 
     @BeforeEach
     fun prepareTestCase() {
-        TimeZone.setDefault(TimeZone.getTimeZone("UTC"))
         dataBuilder.deleteAll()
         dataBuilder.buildInitialData()
     }
