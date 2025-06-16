@@ -1,6 +1,12 @@
 package cz.jurca.fieldreservationsystem.db.adapter
 
 import cz.jurca.fieldreservationsystem.codegen.types.SortByDirection
+import cz.jurca.fieldreservationsystem.db.repository.SportTypeRepository
+import cz.jurca.fieldreservationsystem.db.repository.SportsFieldDao
+import cz.jurca.fieldreservationsystem.db.repository.SportsFieldDaoId
+import cz.jurca.fieldreservationsystem.db.repository.SportsFieldRepository
+import cz.jurca.fieldreservationsystem.db.repository.SportsFieldSportTypeDao
+import cz.jurca.fieldreservationsystem.db.repository.SportsFieldSportTypeRepository
 import cz.jurca.fieldreservationsystem.domain.Address
 import cz.jurca.fieldreservationsystem.domain.City
 import cz.jurca.fieldreservationsystem.domain.Coordinates
@@ -21,12 +27,6 @@ import cz.jurca.fieldreservationsystem.domain.UnvalidatedSportsFieldId
 import cz.jurca.fieldreservationsystem.domain.UpdatedSportsField
 import cz.jurca.fieldreservationsystem.domain.UserId
 import cz.jurca.fieldreservationsystem.domain.ZipCode
-import cz.jurca.fieldreservationsystem.db.repository.SportTypeRepository
-import cz.jurca.fieldreservationsystem.db.repository.SportsFieldDao
-import cz.jurca.fieldreservationsystem.db.repository.SportsFieldDaoId
-import cz.jurca.fieldreservationsystem.db.repository.SportsFieldRepository
-import cz.jurca.fieldreservationsystem.db.repository.SportsFieldSportTypeDao
-import cz.jurca.fieldreservationsystem.db.repository.SportsFieldSportTypeRepository
 import kotlinx.coroutines.reactor.awaitSingle
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.annotation.Lazy

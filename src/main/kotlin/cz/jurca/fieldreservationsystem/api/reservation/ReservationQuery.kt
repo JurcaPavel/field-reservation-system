@@ -4,8 +4,6 @@ import com.netflix.graphql.dgs.DgsComponent
 import com.netflix.graphql.dgs.DgsQuery
 import com.netflix.graphql.dgs.InputArgument
 import cz.jurca.fieldreservationsystem.api.toApi
-import cz.jurca.fieldreservationsystem.platform.cache.CacheProvider
-import cz.jurca.fieldreservationsystem.platform.cache.RESERVATION_KEY
 import cz.jurca.fieldreservationsystem.codegen.types.NotFoundError
 import cz.jurca.fieldreservationsystem.codegen.types.Reservation
 import cz.jurca.fieldreservationsystem.codegen.types.ReservationResult
@@ -14,6 +12,8 @@ import cz.jurca.fieldreservationsystem.domain.ProvidesLoginUser
 import cz.jurca.fieldreservationsystem.domain.ReservationId
 import cz.jurca.fieldreservationsystem.domain.ReservationNotFound
 import cz.jurca.fieldreservationsystem.domain.error.NotResourceOwnerError
+import cz.jurca.fieldreservationsystem.platform.cache.CacheProvider
+import cz.jurca.fieldreservationsystem.platform.cache.RESERVATION_KEY
 
 @DgsComponent
 class ReservationQuery(private val idValidator: IdValidator, private val cacheProvider: CacheProvider, private val userProvider: ProvidesLoginUser) {

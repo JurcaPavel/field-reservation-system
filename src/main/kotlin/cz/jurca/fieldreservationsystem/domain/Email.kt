@@ -10,8 +10,8 @@ class Email private constructor(
     companion object {
         operator fun invoke(value: String): Either<EmailValidationError, Email> =
             either {
-                ensure(value.isNotBlank()) { EmptyEmailName }
-                ensure(isValidEmailFormat(value)) { InvalidEmailFormat }
+                ensure(value.isNotBlank()) { EmailValidationError.EmptyEmailName }
+                ensure(isValidEmailFormat(value)) { EmailValidationError.InvalidEmailFormat }
                 Email(value)
             }
 
@@ -22,14 +22,8 @@ class Email private constructor(
     }
 }
 
-sealed interface EmailValidationError {
-    val message: String?
-}
+sealed class EmailValidationError(val message: String) {
+    data object EmptyEmailName : EmailValidationError("Email cannot be empty.")
 
-data object EmptyEmailName : EmailValidationError {
-    override val message: String = "Email is empty"
-}
-
-data object InvalidEmailFormat : EmailValidationError {
-    override val message: String = "Email has an invalid format"
+    data object InvalidEmailFormat : EmailValidationError("Invalid email format.")
 }

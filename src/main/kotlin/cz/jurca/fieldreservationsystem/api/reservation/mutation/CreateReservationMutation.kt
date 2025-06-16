@@ -6,6 +6,7 @@ import com.netflix.graphql.dgs.InputArgument
 import cz.jurca.fieldreservationsystem.api.toApi
 import cz.jurca.fieldreservationsystem.codegen.types.CreateReservationInput
 import cz.jurca.fieldreservationsystem.codegen.types.CreateReservationResult
+import cz.jurca.fieldreservationsystem.db.adapter.ReservationDbAdapter
 import cz.jurca.fieldreservationsystem.domain.DateTime
 import cz.jurca.fieldreservationsystem.domain.IdValidator
 import cz.jurca.fieldreservationsystem.domain.NewReservation
@@ -15,7 +16,6 @@ import cz.jurca.fieldreservationsystem.domain.SportFieldNotFound
 import cz.jurca.fieldreservationsystem.domain.SportsFieldId
 import cz.jurca.fieldreservationsystem.domain.TimeSlot
 import cz.jurca.fieldreservationsystem.domain.error.ApiNotFoundError
-import cz.jurca.fieldreservationsystem.db.adapter.ReservationDbAdapter
 
 @DgsComponent
 class CreateReservationMutation(

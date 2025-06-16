@@ -1,14 +1,14 @@
 package cz.jurca.fieldreservationsystem.db.adapter
 
+import cz.jurca.fieldreservationsystem.db.repository.UserDao
+import cz.jurca.fieldreservationsystem.db.repository.UserDaoId
+import cz.jurca.fieldreservationsystem.db.repository.UserRepository
 import cz.jurca.fieldreservationsystem.domain.Email
 import cz.jurca.fieldreservationsystem.domain.NewUserRegistration
 import cz.jurca.fieldreservationsystem.domain.UnvalidatedUserId
 import cz.jurca.fieldreservationsystem.domain.User
 import cz.jurca.fieldreservationsystem.domain.UserId
 import cz.jurca.fieldreservationsystem.domain.Username
-import cz.jurca.fieldreservationsystem.db.repository.UserDao
-import cz.jurca.fieldreservationsystem.db.repository.UserDaoId
-import cz.jurca.fieldreservationsystem.db.repository.UserRepository
 import org.springframework.stereotype.Component
 import org.springframework.transaction.annotation.Transactional
 

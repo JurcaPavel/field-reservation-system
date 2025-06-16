@@ -1,8 +1,6 @@
 package cz.jurca.fieldreservationsystem.domain
 
 import cz.jurca.fieldreservationsystem.BaseTest
-import cz.jurca.fieldreservationsystem.domain.EmptyEmailName.message
-import cz.jurca.fieldreservationsystem.domain.InvalidEmailFormat.message
 import io.kotest.assertions.arrow.core.shouldBeLeft
 import io.kotest.assertions.arrow.core.shouldBeRight
 import io.kotest.data.blocking.forAll
@@ -23,8 +21,8 @@ class EmailTest : BaseTest() {
 
             Then()
             result.shouldBeLeft().run {
-                shouldBeTypeOf<EmptyEmailName>()
-                message shouldBe "Email is empty"
+                shouldBeTypeOf<EmailValidationError.EmptyEmailName>()
+                message shouldBe "Email cannot be empty."
             }
         }
     }
@@ -45,8 +43,8 @@ class EmailTest : BaseTest() {
 
             Then()
             result.shouldBeLeft().run {
-                shouldBeTypeOf<InvalidEmailFormat>()
-                message shouldBe "Email has an invalid format"
+                shouldBeTypeOf<EmailValidationError.InvalidEmailFormat>()
+                message shouldBe "Invalid email format."
             }
         }
     }

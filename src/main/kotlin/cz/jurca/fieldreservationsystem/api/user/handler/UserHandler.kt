@@ -1,22 +1,20 @@
 package cz.jurca.fieldreservationsystem.api.user.handler
 
-import arrow.core.Either
+import cz.jurca.fieldreservationsystem.db.adapter.UserDbAdapter
 import cz.jurca.fieldreservationsystem.domain.AuthResult.Failure
 import cz.jurca.fieldreservationsystem.domain.AuthResult.Success
+import cz.jurca.fieldreservationsystem.domain.AuthenticationPassword
 import cz.jurca.fieldreservationsystem.domain.BasicAuthentication
 import cz.jurca.fieldreservationsystem.domain.Email
-import cz.jurca.fieldreservationsystem.domain.EmptyEmailName
-import cz.jurca.fieldreservationsystem.domain.EncodedPassword
-import cz.jurca.fieldreservationsystem.domain.InvalidEmailFormat
+import cz.jurca.fieldreservationsystem.domain.EmailValidationError
 import cz.jurca.fieldreservationsystem.domain.Name
+import cz.jurca.fieldreservationsystem.domain.NewPassword
 import cz.jurca.fieldreservationsystem.domain.NewUserRegistration
-import cz.jurca.fieldreservationsystem.domain.RawPassword
 import cz.jurca.fieldreservationsystem.domain.UserRole
 import cz.jurca.fieldreservationsystem.domain.Username
 import cz.jurca.fieldreservationsystem.domain.error.EmailAlreadyExistsError
 import cz.jurca.fieldreservationsystem.domain.error.RegisterAsAdminError
 import cz.jurca.fieldreservationsystem.domain.error.UsernameAlreadyExistsError
-import cz.jurca.fieldreservationsystem.db.adapter.UserDbAdapter
 import org.springframework.http.HttpHeaders
 import org.springframework.http.HttpStatus
 import org.springframework.security.core.userdetails.ReactiveUserDetailsService
@@ -38,7 +36,7 @@ class UserHandler(
         request.awaitBody<BasicAuthInput>().let { basicAuthInput ->
             BasicAuthentication(
                 Username(basicAuthInput.username),
-                RawPassword(basicAuthInput.password),
+                AuthenticationPassword(basicAuthInput.password),
                 userDetailsService::findByUsername,
                 passwordEncoder::matches,
             ).authenticate().let { authResult ->
@@ -63,40 +61,35 @@ class UserHandler(
                 name = Name(registrationInput.name),
                 username = Username(registrationInput.username),
                 email =
-                    when (val constructedEmail = Email(registrationInput.email)) {
-                        is Either.Left ->
-                            when (constructedEmail.value) {
-                                is EmptyEmailName -> {
-                                    return ServerResponse.badRequest().bodyValueAndAwait(
-                                        RegistrationOutput("Email cannot be empty."),
-                                    )
-                                }
-
-                                is InvalidEmailFormat -> {
-                                    return ServerResponse.badRequest().bodyValueAndAwait(
-                                        RegistrationOutput("Invalid email format."),
-                                    )
-                                }
+                    Email(registrationInput.email).fold(
+                        ifLeft = { validationError ->
+                            when (validationError) {
+                                is EmailValidationError.EmptyEmailName -> return ServerResponse.badRequest().bodyValueAndAwait(RegistrationOutput("Email cannot be empty."))
+                                is EmailValidationError.InvalidEmailFormat -> return ServerResponse.badRequest().bodyValueAndAwait(RegistrationOutput("Invalid email format."))
                             }
-
-                        is Either.Right -> constructedEmail.value
-                    },
-                password = EncodedPassword(passwordEncoder.encode(registrationInput.password)),
+                        },
+                        ifRight = { email -> email },
+                    ),
+                password =
+                    NewPassword(registrationInput.password).fold(
+                        ifLeft = { validationError -> return ServerResponse.badRequest().bodyValueAndAwait(RegistrationOutput(validationError.message)) },
+                        ifRight = { rawPassword -> rawPassword.encode(passwordEncoder::encode) },
+                    ),
                 role = UserRole.valueOf(registrationInput.role.uppercase()),
                 registrationProvider = userDbAdapter::create,
                 usernameExistsProvider = userDbAdapter::existsByUsername,
                 emailExistsProvider = userDbAdapter::existsByEmail,
             ).register().let { registrationResult ->
-                when (registrationResult) {
-                    is Either.Left -> {
-                        when (registrationResult.value) {
-                            is RegisterAsAdminError -> ServerResponse.badRequest().bodyValueAndAwait(RegistrationOutput(registrationResult.value.message))
-                            is EmailAlreadyExistsError -> ServerResponse.status(HttpStatus.CONFLICT).bodyValueAndAwait(RegistrationOutput(registrationResult.value.message))
-                            is UsernameAlreadyExistsError -> ServerResponse.status(HttpStatus.CONFLICT).bodyValueAndAwait(RegistrationOutput(registrationResult.value.message))
+                registrationResult.fold(
+                    ifLeft = { registrationError ->
+                        when (registrationError) {
+                            is RegisterAsAdminError -> ServerResponse.badRequest().bodyValueAndAwait(RegistrationOutput(registrationError.message))
+                            is EmailAlreadyExistsError -> ServerResponse.status(HttpStatus.CONFLICT).bodyValueAndAwait(RegistrationOutput(registrationError.message))
+                            is UsernameAlreadyExistsError -> ServerResponse.status(HttpStatus.CONFLICT).bodyValueAndAwait(RegistrationOutput(registrationError.message))
                         }
-                    }
-                    is Either.Right -> ServerResponse.created(URI.create("/")).bodyValueAndAwait(RegistrationOutput("User [${registrationResult.value.username.value}] registered successfully."))
-                }
+                    },
+                    ifRight = { registeredUser -> ServerResponse.created(URI.create("/")).bodyValueAndAwait(RegistrationOutput("User [${registeredUser.username.value}] registered successfully.")) },
+                )
             }
         }
 

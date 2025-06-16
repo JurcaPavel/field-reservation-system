@@ -9,16 +9,19 @@ import kotlinx.coroutines.runBlocking
 import org.springframework.http.HttpStatus
 
 class RegistrationIntegrationTest : BaseIntegrationTest() {
+    private val strongPassword: String = "strongPassword123!*"
+
     @Test
     fun `given valid registration data, when register, then response should be created and user should be in db`() {
         Given()
-        val registrationInput = RegistrationInput(
-            name = "Test User",
-            username = "testuser",
-            email = "test@example.com",
-            password = "password123",
-            role = "BASIC"
-        )
+        val registrationInput =
+            RegistrationInput(
+                name = "Test User",
+                username = "testuser",
+                email = "test@example.com",
+                password = strongPassword,
+                role = "BASIC",
+            )
 
         When()
         val response =
@@ -31,9 +34,10 @@ class RegistrationIntegrationTest : BaseIntegrationTest() {
                 .returnResult()
 
         Then()
-        response.responseBody shouldBe RegistrationOutput(
-            message = "User [testuser] registered successfully."
-        )
+        response.responseBody shouldBe
+            RegistrationOutput(
+                message = "User [testuser] registered successfully.",
+            )
 
         And("User should be in database")
         runBlocking {
@@ -44,13 +48,14 @@ class RegistrationIntegrationTest : BaseIntegrationTest() {
     @Test
     fun `given registration data with already existing username, when register, then response should have status conflict`() {
         Given()
-        val registrationInput = RegistrationInput(
-            name = "Test User",
-            username = "pjm",
-            email = "test@example.com",
-            password = "password123",
-            role = "MANAGER"
-        )
+        val registrationInput =
+            RegistrationInput(
+                name = "Test User",
+                username = "pjm",
+                email = "test@example.com",
+                password = strongPassword,
+                role = "MANAGER",
+            )
 
         When()
         val response =
@@ -69,13 +74,14 @@ class RegistrationIntegrationTest : BaseIntegrationTest() {
     @Test
     fun `given registration data with already existing email, when register, then response should have status conflict`() {
         Given()
-        val registrationInput = RegistrationInput(
-            name = "Test User",
-            username = "testuser2",
-            email = "manager@email.com",
-            password = "password123",
-            role = "MANAGER"
-        )
+        val registrationInput =
+            RegistrationInput(
+                name = "Test User",
+                username = "testuser2",
+                email = "manager@email.com",
+                password = strongPassword,
+                role = "MANAGER",
+            )
 
         When()
         val response =
@@ -94,13 +100,14 @@ class RegistrationIntegrationTest : BaseIntegrationTest() {
     @Test
     fun `given registration data with invalid email, when register, then response should have status bad request`() {
         Given()
-        val registrationInput = RegistrationInput(
-            name = "Test User",
-            username = "testuser3",
-            email = "invalid-email",
-            password = "password123",
-            role = "BASIC"
-        )
+        val registrationInput =
+            RegistrationInput(
+                name = "Test User",
+                username = "testuser3",
+                email = "invalid-email",
+                password = strongPassword,
+                role = "BASIC",
+            )
 
         When()
         val response =
@@ -119,13 +126,14 @@ class RegistrationIntegrationTest : BaseIntegrationTest() {
     @Test
     fun `given registration data with admin role, when register, response should have status bad request`() {
         Given()
-        val registrationInput = RegistrationInput(
-            name = "Test User",
-            username = "testuser4",
-            email = "test4@example.com",
-            password = "password123",
-            role = "ADMIN"
-        )
+        val registrationInput =
+            RegistrationInput(
+                name = "Test User",
+                username = "testuser4",
+                email = "test4@example.com",
+                password = strongPassword,
+                role = "ADMIN",
+            )
 
         When()
         val response =

@@ -6,7 +6,7 @@ import reactor.core.publisher.Mono
 
 class BasicAuthentication(
     private val username: Username,
-    private val rawPassword: RawPassword,
+    private val rawPassword: AuthenticationPassword,
     private val findByUsernameProvider: suspend (String) -> Mono<UserDetails>,
     private val passwordMatchesProvider: suspend (rawPassword: CharSequence, encodedPassword: String) -> Boolean,
 ) {

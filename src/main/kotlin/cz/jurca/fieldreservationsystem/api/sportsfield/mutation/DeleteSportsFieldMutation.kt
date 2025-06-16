@@ -4,8 +4,6 @@ import com.netflix.graphql.dgs.DgsComponent
 import com.netflix.graphql.dgs.DgsMutation
 import com.netflix.graphql.dgs.InputArgument
 import cz.jurca.fieldreservationsystem.api.toApi
-import cz.jurca.fieldreservationsystem.platform.cache.CacheProvider
-import cz.jurca.fieldreservationsystem.platform.cache.SPORTS_FIELD_KEY
 import cz.jurca.fieldreservationsystem.codegen.types.DeleteSportsFieldResult
 import cz.jurca.fieldreservationsystem.domain.IdValidator
 import cz.jurca.fieldreservationsystem.domain.ProvidesLoginUser
@@ -16,6 +14,8 @@ import cz.jurca.fieldreservationsystem.domain.error.ApiNotManagerOrAdminError
 import cz.jurca.fieldreservationsystem.domain.error.ApiNotResourceOwnerError
 import cz.jurca.fieldreservationsystem.domain.error.NotManagerOrAdminError
 import cz.jurca.fieldreservationsystem.domain.error.NotResourceOwnerError
+import cz.jurca.fieldreservationsystem.platform.cache.CacheProvider
+import cz.jurca.fieldreservationsystem.platform.cache.SPORTS_FIELD_KEY
 
 @DgsComponent
 class DeleteSportsFieldMutation(private val userProvider: ProvidesLoginUser, private val idValidator: IdValidator, private val cacheProvider: CacheProvider) {
