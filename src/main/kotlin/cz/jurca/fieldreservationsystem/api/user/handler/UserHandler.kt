@@ -15,7 +15,7 @@ import cz.jurca.fieldreservationsystem.domain.Username
 import cz.jurca.fieldreservationsystem.domain.error.EmailAlreadyExistsError
 import cz.jurca.fieldreservationsystem.domain.error.RegisterAsAdminError
 import cz.jurca.fieldreservationsystem.domain.error.UsernameAlreadyExistsError
-import org.springframework.http.HttpHeaders
+import cz.jurca.fieldreservationsystem.platform.limiting.LimitingProvider
 import org.springframework.http.HttpStatus
 import org.springframework.security.core.userdetails.ReactiveUserDetailsService
 import org.springframework.security.crypto.password.PasswordEncoder
@@ -31,9 +31,13 @@ class UserHandler(
     private val userDetailsService: ReactiveUserDetailsService,
     private val passwordEncoder: PasswordEncoder,
     private val userDbAdapter: UserDbAdapter,
+    private val limitingProvider: LimitingProvider,
 ) {
     suspend fun authenticate(request: ServerRequest): ServerResponse =
         request.awaitBody<BasicAuthInput>().let { basicAuthInput ->
+            if (limitingProvider.shouldLimitAuthentication(Username(basicAuthInput.username))) {
+                return ServerResponse.status(HttpStatus.TOO_MANY_REQUESTS).bodyValueAndAwait(BasicAuthOutput("Too many authentication attempts. Please try again later."))
+            }
             BasicAuthentication(
                 Username(basicAuthInput.username),
                 AuthenticationPassword(basicAuthInput.password),
@@ -41,14 +45,7 @@ class UserHandler(
                 passwordEncoder::matches,
             ).authenticate().let { authResult ->
                 when (authResult) {
-                    is Success -> {
-                        val headers =
-                            HttpHeaders().apply {
-                                setBasicAuth(authResult.username.value, basicAuthInput.password)
-                            }
-                        ServerResponse.ok().headers { it.addAll(headers) }.bodyValueAndAwait(BasicAuthOutput(authResult.status.value))
-                    }
-
+                    is Success -> ServerResponse.ok().headers { it.setBasicAuth(authResult.username.value, basicAuthInput.password) }.bodyValueAndAwait(BasicAuthOutput(authResult.status.value))
                     is Failure -> ServerResponse.status(HttpStatus.UNAUTHORIZED).bodyValueAndAwait(BasicAuthOutput(authResult.reason.value))
                 }
             }
@@ -64,8 +61,8 @@ class UserHandler(
                     Email(registrationInput.email).fold(
                         ifLeft = { validationError ->
                             when (validationError) {
-                                is EmailValidationError.EmptyEmailName -> return ServerResponse.badRequest().bodyValueAndAwait(RegistrationOutput("Email cannot be empty."))
-                                is EmailValidationError.InvalidEmailFormat -> return ServerResponse.badRequest().bodyValueAndAwait(RegistrationOutput("Invalid email format."))
+                                is EmailValidationError.EmptyEmailName -> return ServerResponse.badRequest().bodyValueAndAwait(RegistrationOutput(validationError.message))
+                                is EmailValidationError.InvalidEmailFormat -> return ServerResponse.badRequest().bodyValueAndAwait(RegistrationOutput(validationError.message))
                             }
                         },
                         ifRight = { email -> email },

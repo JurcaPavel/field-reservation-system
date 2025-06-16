@@ -4,7 +4,7 @@ import cz.jurca.fieldreservationsystem.BaseTest
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.matchers.shouldBe
 
-class UsernameTest : BaseTest(){
+class UsernameTest : BaseTest() {
     @Test
     fun `given username is blank when create it then should throw an exception`() {
         shouldThrow<IllegalArgumentException> {
